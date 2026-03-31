@@ -8,6 +8,7 @@ use App\Services\Aws\Ec2Service;
 use App\Services\Aws\RdsService;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -26,21 +27,39 @@ class RunScheduledActionJob implements ShouldQueue
             ->each(function (Schedule $schedule) use ($now, $ec2Service, $rdsService) {
                 try {
                     // Check if current day is in schedule
-                    $currentDow = $now->copy()->setTimezone($schedule->timezone)->dayOfWeekIso; // 1=Mon, 7=Sun
+                    $localNow = $now->copy()->setTimezone($schedule->timezone);
+                    $currentDow = $localNow->dayOfWeekIso; // 1=Mon, 7=Sun
+                    $currentTime = $localNow->format('H:i');
+                    
+                    Log::info("Checking Schedule: {$schedule->name} (Target: {$schedule->time_of_day}, Current: {$currentTime}, Timezone: {$schedule->timezone})");
+
                     if (!in_array($currentDow, $schedule->days_of_week)) {
+                        Log::info("Skipping Schedule: {$schedule->name} - Day Mismatch (Now: {$currentDow}, Allowed: " . json_encode($schedule->days_of_week) . ")");
                         return;
                     }
 
-                    // Check if current time matches (within 1-minute window)
-                    $currentTime = $now->copy()->setTimezone($schedule->timezone)->format('H:i');
-                    if ($currentTime !== $schedule->time_of_day) {
+                    // Check if current time matches (or is within a 15-minute buffer for manual runs)
+                    $targetTime = \Carbon\Carbon::createFromFormat('H:i', $schedule->time_of_day, $schedule->timezone);
+                    $diffInMinutes = $localNow->diffInMinutes($targetTime, false); // negative if target is in past
+
+                    // We allow execution if: 
+                    // 1. It's the exact minute
+                    // 2. OR it's within 60 minutes AFTER the target time (to catch manual runs/cron delays)
+                    // 3. AND it hasn't run yet today
+                    $isWithinBuffer = ($diffInMinutes <= 0 && $diffInMinutes >= -60);
+                    $alreadyRunToday = $schedule->last_run_at && $schedule->last_run_at->setTimezone($schedule->timezone)->isSameDay($localNow);
+
+                    if (!$isWithinBuffer) {
+                        Log::info("Skipping Schedule: {$schedule->name} - Time Mismatch (Diff: {$diffInMinutes} mins)");
                         return;
                     }
 
-                    // Prevent re-runs within same minute
-                    if ($schedule->last_run_at && $schedule->last_run_at->diffInMinutes($now) < 1) {
+                    if ($alreadyRunToday) {
+                        Log::info("Skipping Schedule: {$schedule->name} - Already run today at " . $schedule->last_run_at->toDateTimeString());
                         return;
                     }
+
+                    Log::info("Executing Schedule: {$schedule->name} for action: {$schedule->action}");
 
                     // Execute action
                     $workspace = $schedule->workspace;
