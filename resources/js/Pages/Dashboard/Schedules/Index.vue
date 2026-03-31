@@ -6,7 +6,7 @@
                 <h1 class="text-4xl lg:text-5xl font-display font-bold tracking-tight text-white mb-2">Schedules</h1>
                 <p class="text-content-variant font-sans">Automate start/stop actions for your EC2 and RDS instances.</p>
             </div>
-            <button class="bg-primary text-white px-6 py-2.5 rounded-sm font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+            <button @click="openModal()" class="bg-primary text-white px-6 py-2.5 rounded-sm font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(59,130,246,0.2)]">
                 <span class="material-symbols-outlined text-sm">add</span>
                 Create Schedule
             </button>
@@ -52,11 +52,17 @@
                             <td class="px-6 py-5">
                                 <span :class="[
                                     'inline-flex items-center px-2.5 py-1 rounded text-[10px] font-mono border font-bold uppercase tracking-wider',
-                                    schedule.action === 'start'
-                                        ? 'bg-tertiary/10 text-tertiary border-tertiary/20'
-                                        : 'bg-error/10 text-error border-error/20'
+                                    schedule.action === 'start' ? 'bg-tertiary/10 text-tertiary border-tertiary/20' :
+                                    schedule.action === 'stop' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
+                                    'bg-error/10 text-error border-error/20'
                                 ]">
-                                    <span class="material-symbols-outlined text-xs mr-1.5">{{ schedule.action === 'start' ? 'play_arrow' : 'stop' }}</span>
+                                    <span class="material-symbols-outlined text-xs mr-1.5">
+                                        {{ 
+                                            schedule.action === 'start' ? 'play_arrow' : 
+                                            schedule.action === 'stop' ? 'stop' : 
+                                            schedule.action === 'terminate' ? 'delete_forever' : 'delete'
+                                        }}
+                                    </span>
                                     {{ schedule.action }}
                                 </span>
                             </td>
@@ -65,7 +71,7 @@
                             </td>
                             <td class="px-6 py-5">
                                 <div class="flex gap-1">
-                                    <DayPill v-for="(day, i) in dayLabels" :key="i" :label="day" :active="schedule.days_of_week.includes(i + 1)" />
+                                    <DayPill v-for="(day, i) in dayLabels" :key="i" :label="day" :active="schedule.days_of_week.includes(i + 1) || schedule.days_of_week.includes(String(i + 1))" />
                                 </div>
                             </td>
                             <td class="px-6 py-5">
@@ -76,7 +82,7 @@
                             </td>
                             <td class="px-6 py-5 text-right">
                                 <div class="flex items-center justify-end gap-2">
-                                    <button class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/10 active:scale-90">
+                                    <button @click="openModal(schedule)" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/10 active:scale-90">
                                         <span class="material-symbols-outlined text-[18px]">edit</span>
                                     </button>
                                     <button @click="deleteSchedule(schedule.id)" class="w-8 h-8 rounded-lg flex items-center justify-center text-error/60 hover:text-error hover:bg-error/10 transition-all border border-transparent hover:border-error/20 active:scale-90">
@@ -96,25 +102,46 @@
             </div>
             <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
         </section>
+
+        <!-- Schedule Create/Edit Modal -->
+        <ScheduleModal 
+            :show="isModalOpen" 
+            :schedule="editingSchedule" 
+            :ec2Instances="ec2Instances" 
+            :rdsInstances="rdsInstances" 
+            @close="closeModal" 
+        />
     </DashboardLayout>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
 import StatCard from '@/Components/Dashboard/StatCard.vue';
 import Toggle from '@/Components/UI/Toggle.vue';
 import DayPill from '@/Components/UI/DayPill.vue';
+import ScheduleModal from '@/Components/Schedules/ScheduleModal.vue';
 
 const props = defineProps({
     schedules: {
         type: Array,
         required: true
+    },
+    ec2Instances: {
+        type: Array,
+        default: () => []
+    },
+    rdsInstances: {
+        type: Array,
+        default: () => []
     }
 });
 
 const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+const isModalOpen = ref(false);
+const editingSchedule = ref(null);
 
 const activeCount = computed(() => props.schedules.filter(s => s.is_active).length);
 const pausedCount = computed(() => props.schedules.filter(s => !s.is_active).length);
@@ -126,8 +153,20 @@ const nextExecutionTime = computed(() => {
     return active[0].time_of_day;
 });
 
+const openModal = (schedule = null) => {
+    editingSchedule.value = schedule;
+    isModalOpen.value = true;
+};
+
+const closeModal = () => {
+    isModalOpen.value = false;
+    setTimeout(() => {
+        editingSchedule.value = null;
+    }, 300);
+};
+
 const toggleSchedule = (id) => {
-    router.post(`/dashboard/schedules/${id}/toggle`, {}, {
+    router.patch(`/dashboard/schedules/${id}/toggle`, {}, {
         preserveScroll: true
     });
 };

@@ -90,6 +90,16 @@ class Ec2Service
             ->update(['state' => 'stopping']);
     }
 
+    public function terminateInstance(Workspace $workspace, string $instanceId): void
+    {
+        $client = $this->factory->ec2($workspace);
+        $client->terminateInstances(['InstanceIds' => [$instanceId]]);
+
+        Ec2Instance::where('workspace_id', $workspace->id)
+            ->where('instance_id', $instanceId)
+            ->update(['state' => 'shutting-down']);
+    }
+
     public function syncSingleInstance(Workspace $workspace, string $instanceId): string
     {
         $client = $this->factory->ec2($workspace);

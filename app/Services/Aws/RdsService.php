@@ -71,6 +71,19 @@ class RdsService
             ->update(['status' => 'stopping']);
     }
 
+    public function deleteInstance(Workspace $workspace, string $dbInstanceId): void
+    {
+        $client = $this->factory->rds($workspace);
+        $client->deleteDBInstance([
+            'DBInstanceIdentifier' => $dbInstanceId,
+            'SkipFinalSnapshot' => true,
+        ]);
+
+        RdsInstance::where('workspace_id', $workspace->id)
+            ->where('db_instance_id', $dbInstanceId)
+            ->update(['status' => 'deleting']);
+    }
+
     public function syncSingleInstance(Workspace $workspace, string $dbInstanceId): string
     {
         $client = $this->factory->rds($workspace);

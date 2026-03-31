@@ -14,9 +14,14 @@ class ScheduleController extends Controller
         $workspace = app('activeWorkspace');
 
         $schedules = $workspace->schedules()->orderByDesc('is_active')->orderBy('time_of_day')->get();
+        
+        $ec2Instances = $workspace->ec2Instances()->get();
+        $rdsInstances = $workspace->rdsInstances()->get();
 
         return Inertia::render('Dashboard/Schedules/Index', [
             'schedules' => $schedules,
+            'ec2Instances' => $ec2Instances,
+            'rdsInstances' => $rdsInstances,
         ]);
     }
 
@@ -28,7 +33,7 @@ class ScheduleController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'resource_type' => ['required', 'in:ec2,rds'],
             'resource_id' => ['required', 'string'],
-            'action' => ['required', 'in:start,stop'],
+            'action' => ['required', 'in:start,stop,terminate,delete'],
             'days_of_week' => ['required', 'array'],
             'days_of_week.*' => ['integer', 'between:1,7'],
             'time_of_day' => ['required', 'regex:/^\d{2}:\d{2}$/'],
@@ -64,7 +69,7 @@ class ScheduleController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'resource_type' => ['required', 'in:ec2,rds'],
             'resource_id' => ['required', 'string'],
-            'action' => ['required', 'in:start,stop'],
+            'action' => ['required', 'in:start,stop,terminate,delete'],
             'days_of_week' => ['required', 'array'],
             'time_of_day' => ['required', 'regex:/^\d{2}:\d{2}$/'],
             'timezone' => ['required', 'string'],

@@ -51,22 +51,33 @@ class RunScheduledActionJob implements ShouldQueue
                     if ($schedule->resource_type === 'ec2') {
                         if ($schedule->action === 'start') {
                             $ec2Service->startInstance($workspace, $schedule->resource_id);
-                        } else {
+                        } elseif ($schedule->action === 'stop') {
                             $ec2Service->stopInstance($workspace, $schedule->resource_id);
+                        } elseif ($schedule->action === 'terminate') {
+                            $ec2Service->terminateInstance($workspace, $schedule->resource_id);
                         }
                     } elseif ($schedule->resource_type === 'rds') {
                         if ($schedule->action === 'start') {
                             $rdsService->startInstance($workspace, $schedule->resource_id);
-                        } else {
+                        } elseif ($schedule->action === 'stop') {
                             $rdsService->stopInstance($workspace, $schedule->resource_id);
+                        } elseif ($schedule->action === 'delete') {
+                            $rdsService->deleteInstance($workspace, $schedule->resource_id);
                         }
                     }
 
                     // Log activity
+                    $actionLabel = [
+                        'start' => 'started',
+                        'stop' => 'stopped',
+                        'terminate' => 'terminated',
+                        'delete' => 'deleted'
+                    ][$schedule->action];
+
                     ActivityLog::create([
                         'workspace_id' => $workspace->id,
                         'actor_type' => 'schedule',
-                        'action' => $schedule->action === 'start' ? 'started' : 'stopped',
+                        'action' => $actionLabel,
                         'resource_type' => strtoupper($schedule->resource_type),
                         'resource_id' => $schedule->resource_id,
                         'resource_name' => $schedule->name,
