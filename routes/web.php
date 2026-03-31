@@ -12,9 +12,11 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\SettingsController;
 
+use Inertia\Inertia;
+
 // Landing page
 Route::get('/', function () {
-    return redirect('/login');
+    return Inertia::render('Landing');
 });
 
 // Auth (guest only)
