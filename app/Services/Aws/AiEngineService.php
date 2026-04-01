@@ -183,7 +183,7 @@ class AiEngineService
                         ],
                         [
                             'title' => "Review Zombie Resource: {$instanceName}",
-                            'description' => "This instance has been running for " . round($uptimeHours, 1) . "h but shows zero activity in the last 7 days. Consider terminating it to eliminate 'Ghost' costs.",
+                            'description' => "This instance has been running for " . number_format($uptimeHours, 1) . "h but shows zero activity in the last 7 days. Consider terminating it to eliminate 'Ghost' costs.",
                             'estimated_monthly_saving' => 12.00,
                             'confidence_score' => 65,
                             'action_type' => 'delete',
