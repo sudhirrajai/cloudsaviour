@@ -69,43 +69,58 @@
                         </div>
 
                         <!-- Action -->
-                        <div>
+                        <div class="col-span-full">
                             <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Action to Perform</label>
-                            <div class="flex gap-3">
-                                <button 
-                                    type="button"
-                                    @click="form.action = 'start'"
-                                    class="flex-1 py-3 text-sm font-medium rounded-lg transition-all flex items-center justify-center gap-2 border"
-                                    :class="form.action === 'start' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-surface border-white/10 text-slate-400 hover:text-white hover:border-white/30'"
-                                >
-                                    <span class="material-symbols-outlined text-[18px]">play_arrow</span> Start
-                                </button>
-                                <button 
-                                    type="button"
-                                    @click="form.action = 'stop'"
-                                    class="flex-1 py-3 text-sm font-medium rounded-lg transition-all flex items-center justify-center gap-2 border"
-                                    :class="form.action === 'stop' ? 'bg-amber-500/10 text-amber-500 border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.15)]' : 'bg-surface border-white/10 text-slate-400 hover:text-white hover:border-white/30'"
-                                >
-                                    <span class="material-symbols-outlined text-[18px]">stop</span> Stop
-                                </button>
-                                <button 
-                                    v-if="form.resource_type === 'ec2'"
-                                    type="button"
-                                    @click="form.action = 'terminate'"
-                                    class="flex-1 py-3 text-sm font-medium rounded-lg transition-all flex items-center justify-center gap-2 border"
-                                    :class="form.action === 'terminate' ? 'bg-rose-500/10 text-rose-400 border-rose-500/50 shadow-[0_0_15px_rgba(244,63,94,0.15)]' : 'bg-surface border-white/10 text-slate-400 hover:text-white hover:border-white/30'"
-                                >
-                                    <span class="material-symbols-outlined text-[18px]">delete_forever</span> Terminate
-                                </button>
-                                <button 
-                                    v-if="form.resource_type === 'rds'"
-                                    type="button"
-                                    @click="form.action = 'delete'"
-                                    class="flex-1 py-3 text-sm font-medium rounded-lg transition-all flex items-center justify-center gap-2 border"
-                                    :class="form.action === 'delete' ? 'bg-rose-500/10 text-rose-400 border-rose-500/50 shadow-[0_0_15px_rgba(244,63,94,0.15)]' : 'bg-surface border-white/10 text-slate-400 hover:text-white hover:border-white/30'"
-                                >
-                                    <span class="material-symbols-outlined text-[18px]">delete</span> Delete
-                                </button>
+                            <div class="space-y-4">
+                                <div class="flex gap-4">
+                                    <button 
+                                        type="button"
+                                        @click="form.action = 'start'"
+                                        class="flex-1 py-3 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 border"
+                                        :class="form.action === 'start' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-surface border-white/10 text-slate-400 hover:text-white hover:border-white/30'"
+                                    >
+                                        <span class="material-symbols-outlined text-[18px]">play_arrow</span> Start
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        @click="form.action = 'stop'"
+                                        class="flex-1 py-3 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 border"
+                                        :class="form.action === 'stop' ? 'bg-amber-500/10 text-amber-500 border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.15)]' : 'bg-surface border-white/10 text-slate-400 hover:text-white hover:border-white/30'"
+                                    >
+                                        <span class="material-symbols-outlined text-[18px]">stop</span> Stop
+                                    </button>
+                                </div>
+                                <div class="pt-4 border-t border-white/5">
+                                    <div class="flex flex-wrap lg:flex-nowrap items-center gap-4 group/danger">
+                                        <div class="flex items-center gap-2 shrink-0">
+                                            <span class="material-symbols-outlined text-xs text-slate-600 group-hover/danger:text-error/60 transition-colors">gpp_maybe</span>
+                                            <div class="text-[9px] font-mono text-slate-600 uppercase tracking-[0.2em] font-bold group-hover/danger:text-error/60 transition-colors">Critical Actions</div>
+                                        </div>
+                                        <div class="h-px bg-white/5 flex-1 group-hover/danger:bg-error/10 transition-colors"></div>
+                                        <div class="flex items-center gap-2 w-full lg:w-auto">
+                                            <button 
+                                                v-if="form.resource_type === 'ec2'"
+                                                type="button"
+                                                @click="form.action = 'terminate'"
+                                                class="flex-1 lg:flex-none px-5 py-2.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 border border-error/20 text-error/60 hover:text-error hover:bg-error/10 group/btn"
+                                                :class="form.action === 'terminate' ? 'bg-error/10 text-error border-error shadow-glow-error' : ''"
+                                                title="This will permanently destroy the instance"
+                                            >
+                                                <span class="material-symbols-outlined text-[16px] group-hover/btn:animate-pulse">delete_forever</span> Terminate
+                                            </button>
+                                            <button 
+                                                v-if="form.resource_type === 'rds'"
+                                                type="button"
+                                                @click="form.action = 'delete'"
+                                                class="flex-1 lg:flex-none px-5 py-2.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 border border-error/20 text-error/60 hover:text-error hover:bg-error/10 group/btn"
+                                                :class="form.action === 'delete' ? 'bg-error/10 text-error border-error shadow-glow-error' : ''"
+                                                title="This will permanently delete the database"
+                                            >
+                                                <span class="material-symbols-outlined text-[16px] group-hover/btn:animate-pulse">heart_broken</span> Delete DB
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div v-if="form.errors.action" class="mt-1 text-xs text-error">{{ form.errors.action }}</div>
                         </div>

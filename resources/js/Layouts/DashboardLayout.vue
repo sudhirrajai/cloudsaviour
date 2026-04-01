@@ -49,6 +49,17 @@
                     <span class="material-symbols-outlined text-[20px]">{{ item.icon }}</span>
                     {{ item.name }}
                 </Link>
+
+                <!-- Admin Section (Only for Admins) -->
+                <div v-if="$page.props.auth.user.is_admin" 
+                    class="px-3 py-1 text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-2 mt-8 opacity-70">Admin</div>
+                <Link v-if="$page.props.auth.user.is_admin" 
+                    href="/admin"
+                    class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-tertiary transition-all hover:bg-tertiary/10"
+                >
+                    <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+                    Admin Panel
+                </Link>
             </nav>
 
             <!-- Sidebar Footer -->

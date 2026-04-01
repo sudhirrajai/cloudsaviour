@@ -14,11 +14,15 @@
                 </div>
                 <div>
                     <h2 class="text-xl font-display font-bold text-white tracking-tight">AWS Infrastructure Connection</h2>
-                    <div class="flex items-center gap-2 mt-1.5">
-                        <span :class="['w-2 h-2 rounded-full shadow-glow', workspace.has_aws_credentials ? 'bg-tertiary shadow-tertiary/50' : 'bg-slate-600']"></span>
-                        <span :class="['text-[10px] font-mono uppercase tracking-widest font-bold', workspace.has_aws_credentials ? 'text-tertiary' : 'text-slate-500']">
-                            {{ workspace.has_aws_credentials ? 'Operational & Connected' : 'Configuration Required' }}
-                        </span>
+                    <div class="flex items-center gap-2 mt-2">
+                        <div v-if="workspace.has_aws_credentials" class="flex items-center gap-1.5 px-2.5 py-1 bg-tertiary/10 border border-tertiary/20 rounded-full shadow-glow shadow-tertiary/5">
+                            <span class="material-symbols-outlined text-[14px] text-tertiary font-bold">check_circle</span>
+                            <span class="text-[9px] font-mono uppercase tracking-[0.2em] font-bold text-tertiary">Connected</span>
+                        </div>
+                        <div v-else class="flex items-center gap-1.5 px-2.5 py-1 bg-error/10 border border-error/20 rounded-full shadow-glow shadow-error/5 pulse-subtle">
+                            <span class="material-symbols-outlined text-[14px] text-error">warning_amber</span>
+                            <span class="text-[9px] font-mono uppercase tracking-[0.2em] font-bold text-error">Configuration Required</span>
+                        </div>
                     </div>
                 </div>
             </div>

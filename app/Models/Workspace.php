@@ -12,7 +12,7 @@ class Workspace extends Model
     protected $fillable = [
         'name', 'slug', 'owner_id',
         'aws_access_key', 'aws_secret_key', 'aws_region', 'aws_account_id',
-        'plan', 'is_active', 'last_synced_at',
+        'plan', 'plan_id', 'is_active', 'last_synced_at',
     ];
 
     protected $casts = [
@@ -49,6 +49,11 @@ class Workspace extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(Plan::class);
     }
 
     public function members(): BelongsToMany

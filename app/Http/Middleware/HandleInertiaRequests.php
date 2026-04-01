@@ -103,6 +103,7 @@ class HandleInertiaRequests extends Middleware
                     'email' => $user->email,
                     'avatar' => $user->avatar,
                     'initials' => $user->initials,
+                    'is_admin' => (bool)$user->is_admin,
                 ] : null,
             ],
             'activeWorkspace' => $activeWorkspace,

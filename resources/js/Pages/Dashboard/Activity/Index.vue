@@ -22,9 +22,10 @@
         </header>
 
         <!-- Stats Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
             <StatCard label="Total Actions" :value="String(logs.total)" sublabel="LOGGED EVENTS" icon="timeline" borderColor="primary" valueColor="white" />
             <StatCard label="Manual" :value="String(logs.data.filter(l => l.actor_type === 'user').length)" sublabel="USER OPERATIONS" icon="person" borderColor="secondary" valueColor="white" />
+            <StatCard label="AI" :value="String(logs.data.filter(l => l.actor_type === 'ai').length)" sublabel="INTELLIGENCE" icon="auto_awesome" borderColor="primary" valueColor="white" />
             <StatCard label="System" :value="String(logs.data.filter(l => l.actor_type === 'system').length)" sublabel="AUTOMATED" icon="smart_toy" borderColor="tertiary" valueColor="white" />
             <StatCard label="Scheduled" :value="String(logs.data.filter(l => l.actor_type === 'schedule').length)" sublabel="CRON TRIGGERED" icon="schedule" borderColor="amber" valueColor="white" />
         </div>

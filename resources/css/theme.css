@@ -1,32 +1,42 @@
 :root {
-    /* Color Palette - Core */
+    /* DEFAULT DARK THEME (Current default) */
     --color-canvas: #0b1224;
     --color-surface: #111a30;
     --color-surface-elevated: #1a243e;
     --color-surface-bright: #3d4763;
-    
-    /* Brand Colors */
     --color-primary: #3b82f6;
     --color-primary-dim: #adc6ff;
     --color-secondary: #8b5cf6;
     --color-tertiary: #4edea3;
-    
-    /* Semantic Colors */
     --color-error: #ef4444;
     --color-warning: #f59e0b;
     --color-success: #10b981;
-    
-    /* Text/Content */
     --color-content: #dbe1fd;
     --color-content-variant: #c2c6d6;
-    
-    /* Borders */
     --color-border-ghost: rgba(148, 163, 184, 0.1);
     --color-border-active: rgba(59, 130, 246, 0.3);
-    
-    /* Utilities */
     --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.08);
     --shadow-ambient: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.light-theme {
+    --color-canvas: #f8fafc;
+    --color-surface: #ffffff;
+    --color-surface-elevated: #f1f5f9;
+    --color-surface-bright: #e2e8f0;
+    --color-primary: #2563eb;
+    --color-primary-dim: #1e40af;
+    --color-secondary: #7c3aed;
+    --color-tertiary: #059669;
+    --color-error: #dc2626;
+    --color-warning: #d97706;
+    --color-success: #16a34a;
+    --color-content: #0f172a;
+    --color-content-variant: #475569;
+    --color-border-ghost: rgba(0, 0, 0, 0.05);
+    --color-border-active: rgba(37, 99, 235, 0.2);
+    --shadow-glow: 0 0 15px rgba(37, 99, 235, 0.05);
+    --shadow-ambient: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 /* Global Button & Interactivity Refinement */

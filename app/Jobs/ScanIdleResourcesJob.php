@@ -18,7 +18,7 @@ class ScanIdleResourcesJob implements ShouldQueue
         public ?int $workspaceId = null
     ) {}
 
-    public function handle(IdleScannerService $scanner): void
+    public function handle(IdleScannerService $scanner, \App\Services\Aws\AiEngineService $aiEngine): void
     {
         $query = Workspace::where('is_active', true)
             ->whereNotNull('aws_access_key')
@@ -28,9 +28,10 @@ class ScanIdleResourcesJob implements ShouldQueue
             $query->where('id', $this->workspaceId);
         }
 
-        $query->each(function (Workspace $workspace) use ($scanner) {
+        $query->each(function (Workspace $workspace) use ($scanner, $aiEngine) {
             try {
                 $scanner->scan($workspace);
+                $aiEngine->generateRecommendations($workspace);
             } catch (\Exception $e) {
                 report($e);
             }

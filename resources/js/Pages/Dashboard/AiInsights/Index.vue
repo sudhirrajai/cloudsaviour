@@ -6,9 +6,15 @@
                 <h1 class="text-4xl lg:text-5xl font-display font-bold tracking-tight text-white mb-2">AI Insights</h1>
                 <p class="text-content-variant font-sans">AI-powered recommendations to optimize your AWS infrastructure and reduce costs.</p>
             </div>
-            <button class="bg-primary text-white px-6 py-2.5 rounded-sm font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                <span class="material-symbols-outlined text-sm">auto_awesome</span>
-                Refresh Analysis
+            <button 
+                @click="refreshAnalysis"
+                :disabled="isRefreshing"
+                class="bg-primary text-white px-6 py-2.5 rounded-sm font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(59,130,246,0.2)] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                <span :class="['material-symbols-outlined text-sm', isRefreshing ? 'animate-spin' : '']">
+                    {{ isRefreshing ? 'sync' : 'auto_awesome' }}
+                </span>
+                {{ isRefreshing ? 'Analyzing...' : 'Refresh Analysis' }}
             </button>
         </header>
 
@@ -104,7 +110,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
 import StatCard from '@/Components/Dashboard/StatCard.vue';
@@ -116,6 +122,8 @@ const props = defineProps({
     }
 });
 
+const isRefreshing = ref(false);
+
 const pendingCount = computed(() => props.recommendations.filter(r => r.status === 'pending').length);
 const appliedCount = computed(() => props.recommendations.filter(r => r.status === 'applied').length);
 const dismissedCount = computed(() => props.recommendations.filter(r => r.status === 'dismissed').length);
@@ -125,6 +133,15 @@ const actionIcon = (type) => ({ resize: 'straighten', delete: 'delete', schedule
 const actionIconBg = (type) => ({ resize: 'bg-primary/10', delete: 'bg-error/10', schedule: 'bg-secondary/10', lifecycle: 'bg-amber-500/10' }[type] || 'bg-primary/10');
 const actionIconColor = (type) => ({ resize: 'text-primary', delete: 'text-error', schedule: 'text-secondary', lifecycle: 'text-amber-500' }[type] || 'text-primary');
 const statusBadge = (status) => ({ pending: 'bg-primary/10 text-primary border-primary/20', applied: 'bg-tertiary/10 text-tertiary border-tertiary/20', dismissed: 'bg-surface-elevated text-content-variant border-border-ghost' }[status]);
+
+const refreshAnalysis = () => {
+    isRefreshing.value = true;
+    router.post('/dashboard/ai-insights/refresh', {}, {
+        onFinish: () => {
+            isRefreshing.value = false;
+        }
+    });
+};
 
 const applyRecommendation = (id) => {
     router.post(`/dashboard/ai-insights/${id}/apply`, {}, {

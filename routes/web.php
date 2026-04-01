@@ -62,6 +62,7 @@ Route::middleware(['auth', 'workspace'])->prefix('dashboard')->group(function ()
 
     // AI Insights
     Route::get('/ai-insights', [AiInsightController::class, 'index'])->name('ai-insights.index');
+    Route::post('/ai-insights/refresh', [AiInsightController::class, 'refresh'])->name('ai-insights.refresh');
     Route::post('/ai-insights/{id}/apply', [AiInsightController::class, 'apply']);
     Route::post('/ai-insights/{id}/dismiss', [AiInsightController::class, 'dismiss']);
 

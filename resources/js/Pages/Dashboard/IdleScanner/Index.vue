@@ -12,6 +12,21 @@
                     <span class="text-[9px] font-mono text-tertiary font-bold tracking-widest uppercase">Live Sync</span>
                 </div>
             </div>
+
+            <!-- Potential Savings Summary Section (framed when $0) -->
+            <div v-if="stats.totalSavings === 0" class="px-5 py-3 bg-surface-elevated/40 backdrop-blur-md border border-white/10 rounded-xl flex items-center gap-4 shadow-glass group hover:bg-surface-elevated/60 transition-all">
+                <div class="w-8 h-8 rounded-lg bg-tertiary/10 flex items-center justify-center border border-tertiary/20">
+                    <span class="material-symbols-outlined text-tertiary text-sm">trending_down</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest font-bold">Potential Savings</span>
+                    <span class="w-1 h-1 rounded-full bg-slate-700"></span>
+                    <span class="text-white font-mono font-bold text-sm">$0</span>
+                    <span class="w-1 h-1 rounded-full bg-slate-700"></span>
+                    <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest font-bold opacity-70">No idle resources detected.</span>
+                </div>
+            </div>
+
             <button @click="scanNow" :disabled="scanning" class="bg-primary text-white px-6 py-2.5 rounded-sm font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(59,130,246,0.2)] disabled:opacity-50">
                 <span class="material-symbols-outlined text-sm">{{ scanning ? 'sync_alt' : 'sync' }}</span>
                 {{ scanning ? 'Scanning...' : 'Scan now' }}
