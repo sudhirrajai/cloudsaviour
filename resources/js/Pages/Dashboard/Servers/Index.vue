@@ -72,7 +72,9 @@
                                     'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono border uppercase tracking-wider',
                                     instance.state === 'running'
                                         ? 'bg-tertiary/10 text-tertiary border-tertiary/20'
-                                        : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                                        : (instance.state === 'terminated' || instance.state === 'shutting-down'
+                                            ? 'bg-slate-500/10 text-slate-400 border-white/10 opacity-60'
+                                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20')
                                 ]">
                                     {{ instance.state }}
                                 </span>
@@ -150,7 +152,9 @@
                                     'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono border uppercase tracking-wider',
                                     db.status === 'available'
                                         ? 'bg-tertiary/10 text-tertiary border-tertiary/20'
-                                        : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                                        : (db.status === 'deleted' || db.status === 'deleting'
+                                            ? 'bg-slate-500/10 text-slate-400 border-white/10 opacity-60'
+                                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20')
                                 ]">
                                     {{ db.status }}
                                 </span>

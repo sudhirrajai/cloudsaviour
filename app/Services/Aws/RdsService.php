@@ -42,11 +42,9 @@ class RdsService
         }
 
         // Remove stale entries
-        if (!empty($dbIds)) {
-            RdsInstance::where('workspace_id', $workspace->id)
-                ->whereNotIn('db_instance_id', $dbIds)
-                ->delete();
-        }
+        RdsInstance::where('workspace_id', $workspace->id)
+            ->whereNotIn('db_instance_id', $dbIds)
+            ->delete();
 
         return $synced;
     }

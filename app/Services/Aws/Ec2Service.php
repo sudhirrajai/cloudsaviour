@@ -20,7 +20,7 @@ class Ec2Service
 
         $result = $client->describeInstances([
             'Filters' => [
-                ['Name' => 'instance-state-name', 'Values' => ['running', 'stopped', 'pending', 'stopping']],
+                ['Name' => 'instance-state-name', 'Values' => ['running', 'stopped', 'pending', 'stopping', 'shutting-down', 'terminated']],
             ],
         ]);
 
@@ -60,12 +60,10 @@ class Ec2Service
             }
         }
 
-        // Remove instances that no longer exist in AWS
-        if (!empty($instanceIds)) {
-            Ec2Instance::where('workspace_id', $workspace->id)
-                ->whereNotIn('instance_id', $instanceIds)
-                ->delete();
-        }
+        // Remove instances that no longer exist in AWS (or are not in our tracked states)
+        Ec2Instance::where('workspace_id', $workspace->id)
+            ->whereNotIn('instance_id', $instanceIds)
+            ->delete();
 
         return $synced;
     }
