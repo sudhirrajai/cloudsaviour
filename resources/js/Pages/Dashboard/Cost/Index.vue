@@ -173,7 +173,7 @@ const computedData = computed(() => {
             previous: 0,
             change: 0,
             pct: total > 0 ? Number(((s.lastMonth / total) * 100).toFixed(1)) : 0
-        })).filter(s => s.amount > 0);
+        }));
     } else if (activePeriod.value === 'last_30_days') {
         let last30Services = {};
         props.history.forEach(day => {

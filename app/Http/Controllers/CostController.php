@@ -34,7 +34,7 @@ class CostController extends Controller
             $lastMonthResult = $client->getCostAndUsage([
                 'TimePeriod' => ['Start' => $lastMonthStart, 'End' => $lastMonthEnd],
                 'Granularity' => 'MONTHLY',
-                'Metrics' => ['UnblendedCost'],
+                'Metrics' => ['UnblendedCost', 'UsageQuantity'],
                 'GroupBy' => [['Type' => 'DIMENSION', 'Key' => 'SERVICE']]
             ]);
         } catch (\Exception $e) { /* ignore */ }

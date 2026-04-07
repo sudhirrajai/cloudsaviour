@@ -36,7 +36,7 @@ class CostExplorerService
                     'End' => $end,
                 ],
                 'Granularity' => 'MONTHLY',
-                'Metrics' => ['UnblendedCost'],
+                'Metrics' => ['UnblendedCost', 'UsageQuantity'],
             ]);
 
             return (float) ($result['ResultsByTime'][0]['Total']['UnblendedCost']['Amount'] ?? 0.00);
@@ -67,7 +67,7 @@ class CostExplorerService
                     'End' => $end,
                 ],
                 'Granularity' => 'DAILY',
-                'Metrics' => ['UnblendedCost'],
+                'Metrics' => ['UnblendedCost', 'UsageQuantity'],
                 'GroupBy' => [
                     ['Type' => 'DIMENSION', 'Key' => 'SERVICE']
                 ],
