@@ -151,6 +151,7 @@ const adminNav = [
     { name: 'User Management', key: 'users', href: '/admin/users', icon: 'group' },
     { name: 'Workspaces', key: 'workspaces', href: '/admin/workspaces', icon: 'domain' },
     { name: 'Subscription Plans', key: 'plans', href: '/admin/plans', icon: 'subscriptions' },
+    { name: 'Waitlist', key: 'waitlist', href: '/admin/waitlists', icon: 'hourglass_top' },
 ];
 </script>
 

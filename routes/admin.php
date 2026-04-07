@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\WorkspaceController;
 use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\WaitlistController;
 
 // Admin Dashboard
 Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -24,3 +25,9 @@ Route::post('/workspaces/{workspace}/toggle-active', [WorkspaceController::class
 
 // Plan Management
 Route::resource('plans', PlanController::class);
+
+// Waitlist Management
+Route::get('/waitlists', [WaitlistController::class, 'index'])->name('admin.waitlists.index');
+Route::post('/waitlists/config', [WaitlistController::class, 'updateConfig'])->name('admin.waitlists.update-config');
+Route::post('/waitlists/{waitlist}/account', [WaitlistController::class, 'createAccount'])->name('admin.waitlists.create-account');
+

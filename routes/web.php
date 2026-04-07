@@ -12,20 +12,26 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\WaitlistController;
 
 use Inertia\Inertia;
 
 // Landing page
-Route::get('/', function () {
-    return Inertia::render('Landing');
-});
+// Route::get('/', function () {
+//     return Inertia::render('Landing');
+// });
+
+Route::get('/', [WaitlistController::class, 'index'])->name('waitlist');
+
+// Route::get('/waitlist', [WaitlistController::class, 'index'])->name('waitlist');
+Route::post('/waitlist', [WaitlistController::class, 'store'])->name('waitlist.store');
 
 // Auth (guest only)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
+    // Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    // Route::post('/register', [AuthController::class, 'register']);
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
