@@ -38,6 +38,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 // Dashboard — requires auth + workspace membership
 Route::middleware(['auth', 'workspace'])->prefix('dashboard')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('servers.index');
+    });
 
     // Workspace management
     Route::get('/workspace/create', [WorkspaceController::class, 'create']);
