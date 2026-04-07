@@ -6,9 +6,18 @@ use App\Models\AiRecommendation;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
+
+use App\Services\Aws\Ec2Service;
+use App\Services\Aws\RdsService;
 
 class AiInsightController extends Controller
 {
+    public function __construct(
+        private Ec2Service $ec2Service,
+        private RdsService $rdsService
+    ) {}
+
     public function index(Request $request)
     {
         $workspace = app('activeWorkspace');
@@ -50,21 +59,54 @@ class AiInsightController extends Controller
         $workspace = app('activeWorkspace');
         $rec = AiRecommendation::where('workspace_id', $workspace->id)->findOrFail($id);
 
-        $rec->update(['status' => 'applied', 'applied_at' => now()]);
+        try {
+            // Identify and execute the actual AWS action
+            switch ($rec->resource_type) {
+                case 'ec2_zombie':
+                case 'ec2_instance':
+                case 'ec2':
+                    $this->ec2Service->terminateInstance($workspace, $rec->resource_id);
+                    break;
 
-        ActivityLog::create([
-            'workspace_id' => $workspace->id,
-            'user_id' => $request->user()->id,
-            'actor_type' => 'ai', // Tagged as AI for the activity filter
-            'action' => 'applied',
-            'resource_type' => $rec->resource_type,
-            'resource_id' => $rec->resource_id,
-            'resource_name' => $rec->title,
-            'ip_address' => $request->ip(),
-            'metadata' => ['applied_by' => $request->user()->name]
-        ]);
+                case 'rds':
+                case 'rds_instance':
+                    $this->rdsService->deleteInstance($workspace, $rec->resource_id);
+                    break;
 
-        return back()->with('success', 'Recommendation applied.');
+                case 'ebs_volume':
+                    $this->ec2Service->deleteVolume($workspace, $rec->resource_id);
+                    break;
+
+                case 'elastic_ip':
+                    $this->ec2Service->releaseAddress($workspace, $rec->resource_id);
+                    break;
+
+                default:
+                    // If it's a "schedule" or "resize", we might need separate logic,
+                    // but for now, we mark as applied for general "fix" clicks.
+                    break;
+            }
+
+            // Update status only if successful
+            $rec->update(['status' => 'applied', 'applied_at' => now()]);
+
+            ActivityLog::create([
+                'workspace_id' => $workspace->id,
+                'user_id' => $request->user()->id,
+                'actor_type' => 'ai',
+                'action' => 'applied',
+                'resource_type' => $rec->resource_type,
+                'resource_id' => $rec->resource_id,
+                'resource_name' => $rec->title,
+                'ip_address' => $request->ip(),
+                'metadata' => ['applied_by' => $request->user()->name]
+            ]);
+
+            return back()->with('success', "Action applied successfully: {$rec->title}");
+        } catch (\Exception $e) {
+            \Log::error("AI Action Failed on recommendation {$id}: " . $e->getMessage());
+            return back()->with('error', "Could not apply action: " . $e->getMessage());
+        }
     }
 
     public function dismiss(Request $request, int $id)

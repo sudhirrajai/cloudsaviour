@@ -54,8 +54,11 @@ class CostController extends Controller
             }
         }
 
+        $allServiceNames = array_unique(array_merge(array_keys($serviceTotals), array_keys($lastMonthBreakdown)));
+
         $services = [];
-        foreach ($serviceTotals as $name => $amount) {
+        foreach ($allServiceNames as $name) {
+            $amount = $serviceTotals[$name] ?? 0;
             $lastAmount = $lastMonthBreakdown[$name] ?? 0;
             $services[] = [
                 'name' => $name,

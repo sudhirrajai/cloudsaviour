@@ -100,6 +100,18 @@ class Ec2Service
             ->update(['state' => 'shutting-down']);
     }
 
+    public function deleteVolume(Workspace $workspace, string $volumeId): void
+    {
+        $client = $this->factory->ec2($workspace);
+        $client->deleteVolume(['VolumeId' => $volumeId]);
+    }
+
+    public function releaseAddress(Workspace $workspace, string $allocationId): void
+    {
+        $client = $this->factory->ec2($workspace);
+        $client->releaseAddress(['AllocationId' => $allocationId]);
+    }
+
     public function syncSingleInstance(Workspace $workspace, string $instanceId): string
     {
         $client = $this->factory->ec2($workspace);
