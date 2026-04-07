@@ -240,6 +240,8 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import Toast from '@/Components/UI/Toast.vue';
+import { driver } from 'driver.js';
+import 'driver.js/dist/driver.css';
 
 const props = defineProps({
     currentPage: {
@@ -266,7 +268,60 @@ const closeDropdowns = (e) => {
 
 onMounted(() => {
     window.addEventListener('click', closeDropdowns);
+
+    if (page.props.flash?.start_tour) {
+        setTimeout(() => {
+            startTour();
+        }, 800);
+    }
 });
+
+const startTour = () => {
+    const driverObj = driver({
+        showProgress: true,
+        animate: true,
+        smoothScroll: true,
+        steps: [
+            { 
+                element: 'aside', 
+                popover: { 
+                    title: 'Welcome to CloudSaviour', 
+                    description: 'This is your navigation hub. Access all AWS management features from here.', 
+                    side: "right", 
+                    align: 'start' 
+                }
+            },
+            { 
+                element: '.dropdown-trigger', 
+                popover: { 
+                    title: 'Workspace Management', 
+                    description: 'CloudSaviour isolates AWS credentials by workspace. Switch easily between environments.', 
+                    side: "bottom", 
+                    align: 'start' 
+                }
+            },
+            { 
+                element: '[href="/dashboard/servers"]', 
+                popover: { 
+                    title: 'Manage Servers', 
+                    description: 'Start, stop, and monitor your EC2 and RDS instances right here.', 
+                    side: "right", 
+                    align: 'start' 
+                }
+            },
+            { 
+                element: '[href="/dashboard/ai-insights"]', 
+                popover: { 
+                    title: 'AI Insights', 
+                    description: 'We use AI to find idle resources and suggest security improvements.', 
+                    side: "right", 
+                    align: 'start' 
+                }
+            },
+        ]
+    });
+    driverObj.drive();
+};
 
 onUnmounted(() => {
     window.removeEventListener('click', closeDropdowns);

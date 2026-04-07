@@ -35,7 +35,7 @@ class WorkspaceController extends Controller
 
         session(['active_workspace_id' => $workspace->id]);
 
-        return redirect('/dashboard/servers');
+        return redirect('/dashboard/onboarding');
     }
 
     public function switch(Request $request)

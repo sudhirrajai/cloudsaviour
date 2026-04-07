@@ -26,18 +26,46 @@
                     </div>
                 </div>
             </div>
+
+            <div class="mb-8 p-6 bg-black/40 rounded-xl border border-white/5 relative group/code">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-white tracking-widest uppercase font-mono">Required IAM Policy</h3>
+                    <div class="flex gap-2">
+                        <button 
+                            type="button"
+                            @click="copyPolicy" 
+                            class="px-3 py-1.5 rounded-lg bg-surface border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest"
+                            :class="{ 'text-primary border-primary/30 bg-primary/10 shadow-glow': copied }"
+                        >
+                            <span class="material-symbols-outlined text-[14px]">{{ copied ? 'check' : 'content_copy' }}</span>
+                            {{ copied ? 'Copied' : 'Copy' }}
+                        </button>
+                        <button 
+                            type="button"
+                            @click="downloadPolicy" 
+                            class="px-3 py-1.5 rounded-lg bg-surface border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest"
+                        >
+                            <span class="material-symbols-outlined text-[14px]">download</span>
+                            Download
+                        </button>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-400 mb-4 font-sans max-w-2xl">Create an IAM policy with this JSON and attach it to the user you generate credentials for. This gives CloudSaviour read-only access to help you manage resources.</p>
+                <div class="bg-black/60 rounded-lg p-3">
+                    <pre class="text-[11px] font-mono text-slate-300 overflow-y-auto max-h-36 no-scrollbar"><code>{{ iamPolicy }}</code></pre>
+                </div>
+            </div>
             
             <form @submit.prevent="saveAws">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                     <div class="space-y-2">
                         <label class="block text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-2 font-bold opacity-70">Primary AWS Region</label>
                         <div class="relative">
-                            <select v-model="awsForm.aws_region" class="w-full bg-white/5 text-white text-sm font-mono border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-primary/50 appearance-none cursor-pointer hover:bg-white/[0.08] transition-all">
-                                <option value="">Select Target Region</option>
-                                <option value="ap-south-1">ap-south-1 (Mumbai)</option>
-                                <option value="us-east-1">us-east-1 (N. Virginia)</option>
-                                <option value="us-west-2">us-west-2 (Oregon)</option>
-                                <option value="eu-west-1">eu-west-1 (Ireland)</option>
+                            <select v-model="awsForm.aws_region" class="w-full bg-[#1a243e] text-white text-sm font-mono border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-primary/50 appearance-none cursor-pointer hover:bg-white/[0.08] transition-all">
+                                <option value="" disabled class="bg-[#1a243e] text-white">Select Target Region</option>
+                                <option v-for="region in awsRegions" :key="region.value" :value="region.value" class="bg-[#1a243e] text-white">
+                                    {{ region.label }} ({{ region.value }})
+                                </option>
                             </select>
                             <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none text-[18px]">expand_more</span>
                         </div>
@@ -214,6 +242,125 @@ const notificationPrefs = ref([
     { label: 'Email notifications for scheduled action failures', enabled: false },
     { label: 'Weekly cost summary report', enabled: true },
 ]);
+
+const copied = ref(false);
+
+const copyPolicy = async () => {
+    try {
+        await navigator.clipboard.writeText(iamPolicy);
+        copied.value = true;
+        setTimeout(() => copied.value = false, 2000);
+    } catch (err) {
+        console.error('Failed to copy', err);
+    }
+};
+
+const downloadPolicy = () => {
+    const blob = new Blob([iamPolicy], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cloudsaviour-iam-policy.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+};
+
+const awsRegions = [
+    { label: 'US East (N. Virginia)', value: 'us-east-1' },
+    { label: 'US East (Ohio)', value: 'us-east-2' },
+    { label: 'US West (N. California)', value: 'us-west-1' },
+    { label: 'US West (Oregon)', value: 'us-west-2' },
+    { label: 'Asia Pacific (Mumbai)', value: 'ap-south-1' },
+    { label: 'Asia Pacific (Singapore)', value: 'ap-southeast-1' },
+    { label: 'Asia Pacific (Sydney)', value: 'ap-southeast-2' },
+    { label: 'Asia Pacific (Tokyo)', value: 'ap-northeast-1' },
+    { label: 'Canada (Central)', value: 'ca-central-1' },
+    { label: 'Europe (Frankfurt)', value: 'eu-central-1' },
+    { label: 'Europe (Ireland)', value: 'eu-west-1' },
+    { label: 'Europe (London)', value: 'eu-west-2' },
+    { label: 'Europe (Paris)', value: 'eu-west-3' },
+    { label: 'South America (São Paulo)', value: 'sa-east-1' },
+];
+
+const iamPolicy = `{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EC2Management",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeInstances",
+        "ec2:DescribeInstanceStatus",
+        "ec2:StartInstances",
+        "ec2:StopInstances",
+        "ec2:TerminateInstances",
+        "ec2:DescribeVolumes",
+        "ec2:DescribeSnapshots",
+        "ec2:DeleteSnapshot",
+        "ec2:DeleteVolume",
+        "ec2:DescribeAddresses",
+        "ec2:ReleaseAddress",
+        "ec2:DescribeNatGateways",
+        "ec2:DeleteNatGateway",
+        "ec2:DescribeLoadBalancers",
+        "ec2:DescribeRegions",
+        "ec2:DescribeTags"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "RDSManagement",
+      "Effect": "Allow",
+      "Action": [
+        "rds:DescribeDBInstances",
+        "rds:StartDBInstance",
+        "rds:StopDBInstance",
+        "rds:DeleteDBInstance",
+        "rds:ListTagsForResource"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudWatchRead",
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:GetMetricStatistics",
+        "cloudwatch:GetMetricData",
+        "cloudwatch:ListMetrics",
+        "cloudwatch:DescribeAlarms",
+        "logs:DescribeLogGroups",
+        "logs:PutRetentionPolicy",
+        "logs:DeleteLogGroup"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CostExplorer",
+      "Effect": "Allow",
+      "Action": [
+        "ce:GetCostAndUsage",
+        "ce:GetCostForecast",
+        "ce:GetDimensionValues"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "S3Analysis",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListAllMyBuckets",
+        "s3:GetBucketLocation",
+        "s3:ListBucket",
+        "s3:GetBucketTagging",
+        "s3:PutLifecycleConfiguration",
+        "s3:GetLifecycleConfiguration"
+      ],
+      "Resource": "*"
+    }
+  ]
+}`;
 
 const saveAws = () => {
     awsForm.put('/dashboard/settings/aws', {

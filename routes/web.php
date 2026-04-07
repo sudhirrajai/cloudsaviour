@@ -11,6 +11,7 @@ use App\Http\Controllers\AiInsightController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\OnboardingController;
 
 use Inertia\Inertia;
 
@@ -36,6 +37,10 @@ Route::middleware(['auth', 'workspace'])->prefix('dashboard')->group(function ()
     Route::get('/workspace/create', [WorkspaceController::class, 'create']);
     Route::post('/workspace', [WorkspaceController::class, 'store']);
     Route::post('/workspace/switch', [WorkspaceController::class, 'switch']);
+
+    // Onboarding
+    Route::get('/onboarding', [OnboardingController::class, 'index'])->name('onboarding.index');
+    Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
 
     // Servers
     Route::get('/servers', [ServerController::class, 'index'])->name('servers.index');

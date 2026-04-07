@@ -78,7 +78,7 @@ class AuthController extends Controller
         Auth::login($user);
         session(['active_workspace_id' => $workspace->id]);
 
-        return redirect('/dashboard/servers');
+        return redirect('/dashboard/onboarding');
     }
 
     public function logout(Request $request)
