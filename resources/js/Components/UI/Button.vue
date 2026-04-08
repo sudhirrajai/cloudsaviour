@@ -26,9 +26,9 @@ const props = defineProps({
 });
 
 const variantClasses = {
-    primary: 'bg-primary text-white hover:bg-blue-600 focus:ring-primary shadow-glow',
-    secondary: 'bg-transparent border border-border-ghost text-content hover:bg-surface-elevated hover:border-border-active focus:ring-border-active',
-    tertiary: 'bg-transparent text-primary-dim hover:text-primary focus:ring-primary',
-    danger: 'bg-error text-white hover:bg-red-600 focus:ring-error',
+    primary: 'bg-slate-900 text-white font-black border border-slate-900 uppercase tracking-widest hover:bg-slate-800 hover:shadow-[0_0_20px_rgba(37,99,235,0.15)] focus:ring-slate-900 shadow-md hover:scale-[1.02] transition-all duration-300',
+    secondary: 'bg-white border border-slate-900 text-slate-900 font-black uppercase tracking-widest hover:bg-slate-50 focus:ring-slate-900 shadow-sm hover:scale-[1.02] transition-all duration-300',
+    tertiary: 'bg-transparent text-slate-600 font-bold uppercase tracking-widest hover:text-slate-900 hover:bg-slate-50 rounded px-2 border border-transparent hover:border-slate-900 transition-all duration-300',
+    danger: 'bg-red-600 text-white font-black border border-slate-900 uppercase tracking-widest hover:bg-red-700 focus:ring-red-600 shadow-md hover:scale-[1.02] transition-all duration-300',
 };
 </script>

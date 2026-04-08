@@ -17,10 +17,10 @@ const props = defineProps({
 });
 
 const variantClasses = {
-    default: 'bg-surface-elevated text-content-variant border border-border-ghost',
-    success: 'bg-tertiary/10 text-tertiary border border-tertiary/20',
-    warning: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
-    danger: 'bg-error/10 text-error border border-error/20',
-    info: 'bg-primary/10 text-primary-dim border border-primary/20',
+    default: 'bg-slate-100 text-slate-700 border border-slate-300',
+    success: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+    warning: 'bg-amber-50 text-amber-700 border border-amber-200',
+    danger: 'bg-rose-50 text-rose-700 border border-rose-200',
+    info: 'bg-sky-50 text-sky-700 border border-sky-200',
 };
 </script>

@@ -1,11 +1,10 @@
 <template>
     <div :class="[
-        'bg-surface-elevated/40 backdrop-blur-sm p-6 rounded-lg border border-white/5 hover:bg-surface-elevated/60 transition-all shadow-sm group active:scale-[0.98]',
-        borderClass
+        'bg-white p-6 rounded-xl border border-slate-900 hover:scale-[1.02] transition-all duration-300 shadow-sm group active:scale-[0.98]',
     ]">
         <div class="flex justify-between items-start mb-6">
             <span class="text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em] opacity-70 group-hover:opacity-100 transition-opacity">{{ label }}</span>
-            <div :class="['w-9 h-9 rounded-md flex items-center justify-center bg-white/5 group-hover:scale-110 transition-transform shadow-glass border border-white/5']">
+            <div :class="['w-9 h-9 rounded-md flex items-center justify-center bg-slate-50 group-hover:scale-110 transition-transform shadow-sm border border-slate-200']">
                 <span :class="['material-symbols-outlined text-[20px]', iconColorClass]">{{ icon }}</span>
             </div>
         </div>
@@ -27,17 +26,17 @@ const props = defineProps({
 });
 
 const colorMap = {
-    primary: { border: 'border-primary', icon: 'text-primary', value: 'text-primary' },
-    secondary: { border: 'border-secondary', icon: 'text-secondary', value: 'text-secondary' },
-    tertiary: { border: 'border-tertiary', icon: 'text-tertiary', value: 'text-tertiary' },
-    error: { border: 'border-error', icon: 'text-error', value: 'text-error' },
-    amber: { border: 'border-amber-500', icon: 'text-amber-500', value: 'text-amber-400' },
-    white: { border: 'border-primary', icon: 'text-primary', value: 'text-white' },
-    grey: { border: 'border-slate-500', icon: 'text-slate-500', value: 'text-content-variant' },
+    primary: { border: 'border-l-4 border-l-primary', icon: 'text-primary', value: 'text-slate-900' },
+    secondary: { border: 'border-l-4 border-l-secondary', icon: 'text-secondary', value: 'text-slate-900' },
+    tertiary: { border: 'border-l-4 border-l-tertiary', icon: 'text-tertiary', value: 'text-slate-900' },
+    error: { border: 'border-l-4 border-l-error', icon: 'text-error', value: 'text-slate-900' },
+    amber: { border: 'border-l-4 border-l-amber-500', icon: 'text-amber-500', value: 'text-slate-900' },
+    white: { border: 'border-l-4 border-l-primary', icon: 'text-primary', value: 'text-slate-900' },
+    grey: { border: 'border-l-4 border-l-slate-400', icon: 'text-slate-500', value: 'text-slate-900' },
 };
 
 const colorSet = colorMap[props.borderColor] || colorMap.primary;
 const borderClass = colorSet.border;
 const iconColorClass = colorSet.icon;
-const valueColorClass = props.valueColor === 'white' ? 'text-white' : colorSet.value;
+const valueColorClass = colorSet.value;
 </script>

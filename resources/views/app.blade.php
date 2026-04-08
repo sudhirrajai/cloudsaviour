@@ -12,7 +12,7 @@
     @vite('resources/css/app.css')
     @inertiaHead
   </head>
-  <body class="font-sans antialiased bg-[#030711] text-white overflow-x-hidden">
+  <body class="font-sans antialiased bg-canvas text-content overflow-x-hidden">
     @inertia
   </body>
 </html>

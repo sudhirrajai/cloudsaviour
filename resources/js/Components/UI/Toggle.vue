@@ -4,8 +4,8 @@
         role="switch"
         :aria-checked="modelValue"
         :class="[
-            'relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:ring-offset-2 focus:ring-offset-canvas',
-            modelValue ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-slate-700'
+            'relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 focus:ring-offset-white',
+            modelValue ? 'bg-emerald-500 shadow-sm' : 'bg-slate-300'
         ]"
         @click="$emit('update:modelValue', !modelValue)"
     >

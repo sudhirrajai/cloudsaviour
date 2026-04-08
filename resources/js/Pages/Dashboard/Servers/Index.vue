@@ -3,7 +3,7 @@
         <!-- Page Header -->
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
             <div>
-                <h1 class="text-4xl lg:text-5xl font-display font-bold tracking-tight text-white mb-2">Servers</h1>
+                <h1 class="text-4xl lg:text-5xl font-display font-bold tracking-tight text-slate-900 mb-2">Servers</h1>
                 <div class="flex items-center gap-3">
                     <p class="text-content-variant font-sans">Manage and monitor your EC2 and RDS instances.</p>
                     <div class="px-2.5 py-0.5 bg-tertiary/10 border border-tertiary/20 rounded-full flex items-center gap-2 group transition-all">
@@ -16,13 +16,13 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <div v-if="syncing" class="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg border border-white/10">
+                <div v-if="syncing" class="flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-lg border border-slate-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-glow shadow-primary"></span>
-                    <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Syncing AWS...</span>
+                    <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Syncing AWS...</span>
                 </div>
-                <button @click="syncNow" :disabled="syncing" class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-md font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 active:scale-95 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] disabled:opacity-50">
-                    <span :class="['material-symbols-outlined text-sm', syncing ? 'animate-spin' : '']">sync</span>
-                    {{ syncing ? 'Syncing...' : 'Sync now' }}
+                <button @click="syncNow" :disabled="syncing" class="bg-slate-900 hover:bg-slate-800 hover:shadow-[0_0_20px_rgba(37,99,235,0.15)] text-white px-6 py-2.5 rounded-lg border border-slate-900 font-mono text-[11px] uppercase tracking-[0.2em] font-black flex items-center gap-3 hover:scale-[1.05] active:scale-95 transition-all duration-300 shadow-md disabled:opacity-50">
+                    <span :class="['material-symbols-outlined text-sm font-black', syncing ? 'animate-spin' : '']">sync</span>
+                    {{ syncing ? 'Processing...' : 'Sync now' }}
                 </button>
             </div>
         </header>
@@ -38,17 +38,17 @@
         </div>
 
         <!-- EC2 Instances -->
-        <section class="bg-surface/50 backdrop-blur-sm rounded-lg border border-white/5 overflow-hidden relative mb-10">
-            <div class="bg-surface-elevated/80 px-6 py-4 flex items-center justify-between border-b border-white/5">
+        <section class="bg-white rounded-xl border border-slate-900 overflow-hidden relative mb-10 shadow-sm">
+            <div class="bg-slate-50 px-6 py-4 flex items-center justify-between border-b border-slate-900">
                 <div class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-primary text-[22px]">cloud</span>
-                    <span class="text-sm font-semibold text-white tracking-wide">EC2 Instances</span>
-                    <span class="bg-primary/20 text-primary text-[10px] font-mono px-2 py-0.5 rounded-full border border-primary/30">{{ ec2Instances.length }}</span>
+                    <span class="text-sm font-semibold text-slate-900 tracking-wide">EC2 Instances</span>
+                    <span class="bg-primary/10 text-primary text-[10px] font-mono px-2 py-0.5 rounded-full border border-primary/20">{{ ec2Instances.length }}</span>
                 </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[900px]">
-                    <thead class="bg-canvas text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em] border-b border-white/5">
+                    <thead class="bg-slate-50 text-[10px] font-mono text-slate-900 uppercase tracking-[0.2em] border-b border-slate-900">
                         <tr>
                             <th class="px-6 py-4 font-normal">Instance</th>
                             <th class="px-6 py-4 font-normal">Type</th>
@@ -58,10 +58,10 @@
                             <th class="px-6 py-4 font-normal text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-white/5">
-                        <tr v-for="instance in ec2Instances" :key="instance.id" class="group hover:bg-white/[0.03] transition-colors">
+                    <tbody class="divide-y divide-slate-200">
+                        <tr v-for="instance in ec2Instances" :key="instance.id" class="group hover:bg-slate-50 transition-colors">
                             <td class="px-6 py-5">
-                                <div class="text-sm font-semibold text-white group-hover:text-primary transition-colors">{{ instance.name || 'Unnamed Instance' }}</div>
+                                <div class="text-sm font-semibold text-slate-900 group-hover:text-primary transition-colors">{{ instance.name || 'Unnamed Instance' }}</div>
                                 <div class="font-mono text-[10px] text-content-variant mt-1 opacity-70">{{ instance.instance_id }}</div>
                             </td>
                             <td class="px-6 py-5">
@@ -115,17 +115,17 @@
         </section>
 
         <!-- RDS Instances -->
-        <section class="bg-surface/50 backdrop-blur-sm rounded-lg border border-white/5 overflow-hidden relative">
-            <div class="bg-surface-elevated/80 px-6 py-4 flex items-center justify-between border-b border-white/5">
+        <section class="bg-white rounded-xl border border-slate-900 overflow-hidden relative shadow-sm text-slate-900">
+            <div class="bg-slate-50 px-6 py-4 flex items-center justify-between border-b border-slate-900">
                 <div class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-secondary text-[22px]">database</span>
-                    <span class="text-sm font-semibold text-white tracking-wide">RDS Instances</span>
-                    <span class="bg-secondary/20 text-secondary text-[10px] font-mono px-2 py-0.5 rounded-full border border-secondary/30">{{ rdsInstances.length }}</span>
+                    <span class="text-sm font-semibold text-slate-900 tracking-wide">RDS Instances</span>
+                    <span class="bg-secondary/10 text-secondary text-[10px] font-mono px-2 py-0.5 rounded-full border border-secondary/20">{{ rdsInstances.length }}</span>
                 </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[900px]">
-                    <thead class="bg-canvas text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em] border-b border-white/5">
+                    <thead class="bg-slate-50 text-[10px] font-mono text-slate-900 uppercase tracking-[0.2em] border-b border-slate-900">
                         <tr>
                             <th class="px-6 py-4 font-normal">Database</th>
                             <th class="px-6 py-4 font-normal">Engine</th>
@@ -135,10 +135,10 @@
                             <th class="px-6 py-4 font-normal text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-white/5">
-                        <tr v-for="db in rdsInstances" :key="db.id" class="group hover:bg-white/[0.03] transition-colors">
+                    <tbody class="divide-y divide-slate-200">
+                        <tr v-for="db in rdsInstances" :key="db.id" class="group hover:bg-slate-50 transition-colors">
                             <td class="px-6 py-5">
-                                <div class="text-sm font-semibold text-white group-hover:text-secondary transition-colors">{{ db.db_instance_id }}</div>
+                                <div class="text-sm font-semibold text-slate-900 group-hover:text-secondary transition-colors">{{ db.db_instance_id }}</div>
                                 <div class="font-mono text-[10px] text-content-variant mt-1 opacity-70">{{ db.db_name || 'DB Name: —' }}</div>
                             </td>
                             <td class="px-6 py-5">

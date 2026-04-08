@@ -28,7 +28,7 @@ const description = computed(() => {
 <template>
     <Head :title="title" />
     
-    <div class="min-h-screen bg-[#030711] flex items-center justify-center p-6 font-sans antialiased overflow-hidden relative">
+    <div class="min-h-screen bg-canvas flex items-center justify-center p-6 font-sans antialiased overflow-hidden relative">
         <!-- Background Decorative Elements -->
         <div class="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-[#3b82f6]/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div class="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-[#8b5cf6]/10 rounded-full blur-[120px] pointer-events-none"></div>
@@ -39,8 +39,8 @@ const description = computed(() => {
         <div class="max-w-xl w-full text-center relative z-10 space-y-12">
             <!-- Glitch Status Code -->
             <div class="relative inline-block group">
-                <div class="absolute inset-0 bg-[#3b82f6]/30 blur-3xl rounded-full scale-110 group-hover:bg-[#3b82f6]/50 transition-all duration-700"></div>
-                <h1 class="text-[140px] md:text-[220px] font-black leading-none tracking-tighter text-white select-none relative drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-110 group-hover:bg-primary/30 transition-all duration-700"></div>
+                <h1 class="text-[140px] md:text-[220px] font-black leading-none tracking-tighter text-content select-none relative drop-shadow-[0_0_20px_rgba(0,0,0,0.05)]">
                     {{ status }}
                 </h1>
             </div>
@@ -51,8 +51,8 @@ const description = computed(() => {
                     <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
                     <span class="text-[10px] font-mono text-red-500 uppercase tracking-widest">Diagnostic Protocol {{ status }}</span>
                 </div>
-                <h2 class="text-3xl md:text-5xl font-bold text-white tracking-tight uppercase">{{ title }}</h2>
-                <p class="text-slate-400 text-sm md:text-lg max-w-sm mx-auto leading-relaxed font-light italic opacity-80">
+                <h2 class="text-3xl md:text-5xl font-bold text-content tracking-tight uppercase">{{ title }}</h2>
+                <p class="text-content-variant text-sm md:text-lg max-w-sm mx-auto leading-relaxed font-light italic opacity-80">
                     "{{ description }}"
                 </p>
             </div>
@@ -60,7 +60,7 @@ const description = computed(() => {
             <!-- Action -->
             <div class="pt-8">
                 <Link href="/" 
-                    class="inline-flex items-center gap-3 bg-white text-black px-10 py-4 rounded-xl font-bold transition-all hover:bg-[#3b82f6] hover:text-white hover:scale-105 active:scale-95 group shadow-[0_0_40px_rgba(59,130,246,0.3)]"
+                    class="inline-flex items-center gap-3 bg-primary text-white px-10 py-4 rounded-xl font-bold transition-all hover:bg-primary-dim hover:scale-105 active:scale-95 group shadow-glow"
                 >
                     <span class="material-symbols-outlined text-xl transition-transform group-hover:-translate-x-1">rocket_launch</span>
                     RE-INITIALIZE
@@ -87,7 +87,7 @@ const description = computed(() => {
                     fontSize: `${Math.random() * 20 + 5}px`
                 }"
             >
-                <span class="text-white/10 font-mono">{{ Math.random() > 0.5 ? '0' : '1' }}</span>
+                <span class="text-slate-900/10 font-mono">{{ Math.random() > 0.5 ? '0' : '1' }}</span>
             </div>
         </div>
     </div>

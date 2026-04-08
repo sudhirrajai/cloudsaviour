@@ -3,30 +3,30 @@
         <!-- Page Header -->
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
             <div>
-                <h1 class="text-4xl lg:text-5xl font-display font-bold tracking-tight text-white mb-2">Schedules</h1>
-                <p class="text-content-variant font-sans">Automate start/stop actions for your EC2 and RDS instances.</p>
+                <h1 class="text-4xl lg:text-5xl font-display font-bold tracking-tight text-slate-900 mb-2">Schedules</h1>
+                <p class="text-slate-600 font-sans">Automate start/stop actions for your EC2 and RDS instances.</p>
             </div>
-            <button @click="openModal()" class="bg-primary text-white px-6 py-2.5 rounded-sm font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                <span class="material-symbols-outlined text-sm">add</span>
+            <button @click="openModal()" class="bg-slate-900 hover:bg-slate-800 hover:shadow-[0_0_20px_rgba(37,99,235,0.15)] text-white px-6 py-2.5 rounded-lg border border-slate-900 font-mono text-[11px] uppercase tracking-widest font-black flex items-center gap-3 active:scale-95 transition-all duration-300 shadow-md">
+                <span class="material-symbols-outlined text-[18px]">add</span>
                 Create Schedule
             </button>
         </header>
 
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <StatCard label="Active Schedules" :value="String(activeCount)" sublabel="AUTOMATED RULES" icon="schedule" borderColor="primary" valueColor="white" />
+            <StatCard label="Active Schedules" :value="String(activeCount)" sublabel="AUTOMATED RULES" icon="schedule" borderColor="primary" valueColor="slate-900" />
             <StatCard label="Next Execution" sublabel="UPCOMING" icon="timer" borderColor="tertiary">
-                <span class="font-mono text-tertiary">{{ nextExecutionTime }}</span>
+                <span class="font-mono text-tertiary font-bold">{{ nextExecutionTime }}</span>
             </StatCard>
-            <StatCard label="Paused" :value="String(pausedCount)" sublabel="DISABLED RULES" icon="pause_circle" borderColor="grey" valueColor="white" />
-            <StatCard label="Total Rules" :value="String(schedules.length)" sublabel="SAVING COSTS" icon="analytics" borderColor="secondary" valueColor="white" />
+            <StatCard label="Paused" :value="String(pausedCount)" sublabel="DISABLED RULES" icon="pause_circle" borderColor="slate-300" valueColor="slate-900" />
+            <StatCard label="Total Rules" :value="String(schedules.length)" sublabel="SAVING COSTS" icon="analytics" borderColor="secondary" valueColor="slate-900" />
         </div>
 
         <!-- Schedules Table -->
-        <section class="bg-surface/50 backdrop-blur-sm rounded-lg border border-white/5 overflow-hidden relative">
+        <section class="bg-white rounded-lg border border-slate-900 overflow-hidden relative shadow-ambient">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[1100px]">
-                    <thead class="bg-canvas text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em] border-b border-white/5">
+                    <thead class="bg-slate-50 text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] border-b border-slate-900">
                         <tr>
                             <th class="px-6 py-4 font-normal">Schedule Name</th>
                             <th class="px-6 py-4 font-normal">Target Resource</th>
@@ -38,13 +38,13 @@
                             <th class="px-6 py-4 font-normal text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-white/5">
-                        <tr v-for="schedule in schedules" :key="schedule.id" class="group hover:bg-white/[0.03] transition-colors">
+                    <tbody class="divide-y divide-slate-200">
+                        <tr v-for="schedule in schedules" :key="schedule.id" class="group hover:bg-slate-50 transition-colors">
                             <td class="px-6 py-5">
-                                <span class="text-sm font-semibold text-white group-hover:text-primary transition-colors">{{ schedule.name }}</span>
+                                <span class="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors">{{ schedule.name }}</span>
                             </td>
                             <td class="px-6 py-5">
-                                <div class="flex items-center gap-2 px-2 py-1 bg-white/5 rounded border border-white/5 w-fit">
+                                <div class="flex items-center gap-2 px-2 py-1 bg-slate-50 rounded border border-slate-200 w-fit">
                                     <span :class="['text-[10px] font-mono font-bold', schedule.resource_type === 'ec2' ? 'text-primary' : 'text-secondary']">{{ schedule.resource_type.toUpperCase() }}</span>
                                     <span class="text-[10px] font-mono text-slate-500">{{ schedule.resource_id }}</span>
                                 </div>
@@ -67,7 +67,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-5">
-                                <span class="font-mono text-sm text-white font-bold">{{ schedule.time_of_day }}</span>
+                                <span class="font-mono text-sm text-slate-900 font-bold uppercase tracking-widest">{{ schedule.time_of_day }}</span>
                             </td>
                             <td class="px-6 py-5">
                                 <div class="flex gap-1">
@@ -82,17 +82,17 @@
                             </td>
                             <td class="px-6 py-5 text-right">
                                 <div class="flex items-center justify-end gap-2">
-                                    <button @click="openModal(schedule)" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/10 active:scale-90">
+                                    <button @click="openModal(schedule)" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-primary hover:bg-primary/5 transition-all border border-transparent hover:border-primary active:scale-90">
                                         <span class="material-symbols-outlined text-[18px]">edit</span>
                                     </button>
-                                    <button @click="deleteSchedule(schedule.id)" class="w-8 h-8 rounded-lg flex items-center justify-center text-error/60 hover:text-error hover:bg-error/10 transition-all border border-transparent hover:border-error/20 active:scale-90">
+                                    <button @click="deleteSchedule(schedule.id)" class="w-8 h-8 rounded-lg flex items-center justify-center text-error/60 hover:text-error hover:bg-error/5 transition-all border border-transparent hover:border-error active:scale-90">
                                         <span class="material-symbols-outlined text-[18px]">delete</span>
                                     </button>
                                 </div>
                             </td>
                         </tr>
                         <tr v-if="schedules.length === 0">
-                            <td colspan="8" class="px-6 py-12 text-center text-content-variant font-mono text-xs italic">
+                            <td colspan="8" class="px-6 py-12 text-center text-slate-400 font-mono text-xs italic">
                                 No automation schedules detected.
                                 <span class="block mt-1 text-[10px] opacity-70 uppercase tracking-widest">Click 'Create Schedule' to start automating.</span>
                             </td>

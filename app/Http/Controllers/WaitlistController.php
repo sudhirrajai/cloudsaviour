@@ -8,7 +8,7 @@ use App\Models\Waitlist;
 
 class WaitlistController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $realCount = Waitlist::count();
         $fakeCount = (int) env('WAITLIST_FAKE_COUNTER', 246);

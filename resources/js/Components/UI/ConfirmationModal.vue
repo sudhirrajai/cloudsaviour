@@ -2,24 +2,24 @@
     <Transition name="modal-fade">
         <div v-if="show" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
             <!-- Backdrop -->
-            <div class="absolute inset-0 bg-canvas/80 backdrop-blur-md" @click="handleCancel"></div>
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="handleCancel"></div>
 
             <!-- Modal Content -->
-            <div class="relative w-full max-w-lg bg-surface-elevated/90 border border-white/10 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in duration-300">
+            <div class="relative w-full max-w-lg bg-white border border-slate-900 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
                 <!-- Header -->
-                <div class="px-8 py-6 border-b border-white/5 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-error/10 flex items-center justify-center border border-error/20">
-                        <span class="material-symbols-outlined text-error text-2xl">warning</span>
+                <div class="px-8 py-6 border-b border-slate-200 flex items-center gap-4 bg-slate-50">
+                    <div class="w-12 h-12 rounded-xl bg-white border border-slate-900 flex items-center justify-center shadow-sm">
+                        <span class="material-symbols-outlined text-rose-500 text-2xl">warning_amber</span>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-white">{{ title }}</h3>
+                        <h3 class="text-xl font-display font-bold text-slate-900">{{ title }}</h3>
                         <p class="text-[10px] font-mono text-slate-500 uppercase tracking-widest opacity-70">Security Checkpoint</p>
                     </div>
                 </div>
 
                 <!-- Body -->
                 <div class="px-8 py-8">
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6 font-medium">
                         {{ message }}
                     </p>
 
@@ -34,7 +34,7 @@
                             <input 
                                 v-model="userInput" 
                                 type="text" 
-                                class="w-full bg-surface border border-white/10 rounded-lg px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-primary/50 transition-all placeholder:text-slate-600"
+                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 font-mono text-sm focus:outline-none focus:border-primary transition-all placeholder:text-slate-400 shadow-sm"
                                 :placeholder="`Type ${confirmWord} here`"
                                 @keyup.enter="handleConfirm"
                             />
@@ -46,10 +46,10 @@
                 </div>
 
                 <!-- Footer -->
-                <div class="px-8 py-6 bg-surface-elevated/30 flex items-center justify-end gap-3 border-t border-white/5">
+                <div class="px-8 py-6 bg-slate-50 flex items-center justify-end gap-3 border-t border-slate-200">
                     <button 
                         @click="handleCancel"
-                        class="px-5 py-2.5 rounded-lg text-[11px] font-mono uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+                        class="px-5 py-2.5 rounded-lg text-[11px] font-mono uppercase tracking-widest font-bold text-slate-400 hover:text-slate-900 hover:bg-slate-200 transition-all"
                     >
                         Cancel
                     </button>
