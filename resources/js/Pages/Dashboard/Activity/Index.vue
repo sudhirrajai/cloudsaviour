@@ -51,10 +51,10 @@
                             </td>
                             <td class="px-6 py-5">
                                 <div class="flex items-center gap-3">
-                                    <div v-if="log.actor_type === 'user'" :class="['w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white bg-primary border border-slate-200 shadow-sm']">
+                                    <div v-if="log.actor_type === 'user'" :class="['w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white bg-primary border border-slate-200 shadow-sm shadow-primary/20']">
                                         {{ log.actor_initials }}
                                     </div>
-                                    <div v-else :class="['w-9 h-9 rounded-full flex items-center justify-center border border-slate-200 shadow-sm bg-white']">
+                                    <div v-else :class="['w-9 h-9 rounded-full flex items-center justify-center border border-slate-200 shadow-sm transition-all group-hover:scale-110', actorIconBg(log.actor_type)]">
                                         <span :class="['material-symbols-outlined text-[18px]', actorIconColor(log.actor_type)]">{{ actorIcon(log.actor_type) }}</span>
                                     </div>
                                     <div>

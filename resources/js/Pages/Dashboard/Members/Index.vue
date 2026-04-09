@@ -161,11 +161,11 @@ const roleBadge = (role) => ({
 }[role] || 'bg-surface-elevated text-content-variant border-border-ghost');
 
 const avatarBg = (role) => ({
-    owner: 'bg-secondary/30',
-    admin: 'bg-primary/30',
-    developer: 'bg-tertiary/30',
-    viewer: 'bg-slate-600/30',
-}[role] || 'bg-slate-600/30');
+    owner: 'bg-secondary/60',
+    admin: 'bg-primary/60',
+    developer: 'bg-tertiary/60',
+    viewer: 'bg-slate-600/60',
+}[role] || 'bg-slate-600/60');
 
 const updateRole = (userId, role) => {
     router.post(`/dashboard/members/${userId}/role`, { role }, {

@@ -1,6 +1,7 @@
 <template>
     <div :class="[
         'bg-white p-6 rounded-xl border border-slate-900 hover:scale-[1.02] transition-all duration-300 shadow-sm group active:scale-[0.98]',
+        borderClass
     ]">
         <div class="flex justify-between items-start mb-6">
             <span class="text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em] opacity-70 group-hover:opacity-100 transition-opacity">{{ label }}</span>
