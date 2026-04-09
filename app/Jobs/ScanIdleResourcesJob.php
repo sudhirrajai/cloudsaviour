@@ -30,8 +30,29 @@ class ScanIdleResourcesJob implements ShouldQueue
 
         $query->each(function (Workspace $workspace) use ($scanner, $aiEngine) {
             try {
+                $beforeCount = $workspace->idleResources()->whereNull('resolved_at')->count();
                 $scanner->scan($workspace);
                 $aiEngine->generateRecommendations($workspace);
+                $afterCount = $workspace->idleResources()->whereNull('resolved_at')->count();
+
+                if ($afterCount > $beforeCount && $workspace->shouldNotify('idle resource detection')) {
+                    $newResources = $workspace->idleResources()
+                        ->whereNull('resolved_at')
+                        ->latest('detected_at')
+                        ->take($afterCount - $beforeCount)
+                        ->get()
+                        ->map(fn($r) => [
+                            'type' => $r->resource_type,
+                            'id' => $r->resource_id,
+                            'cost' => $r->estimated_monthly_cost
+                        ])->toArray();
+
+                    $totalSavings = array_sum(array_column($newResources, 'cost'));
+
+                    \Illuminate\Support\Facades\Mail::to($workspace->owner->email)->send(
+                        new \App\Mail\IdleResourceFoundMail($workspace->name, $newResources, $totalSavings)
+                    );
+                }
             } catch (\Exception $e) {
                 report($e);
             }

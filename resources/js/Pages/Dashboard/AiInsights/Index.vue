@@ -9,7 +9,7 @@
             <button 
                 @click="refreshAnalysis"
                 :disabled="isRefreshing"
-                class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-sm font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 active:scale-95 transition-all shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
+                class="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-sm font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 active:scale-95 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 <span :class="['material-symbols-outlined text-sm', isRefreshing ? 'animate-spin' : '']">
                     {{ isRefreshing ? 'sync' : 'auto_awesome' }}
@@ -37,7 +37,7 @@
                     <!-- Icon -->
                     <div :class="[
                         'w-12 h-12 flex items-center justify-center rounded-xl shrink-0 border border-slate-200 bg-white group-hover:scale-110 transition-transform duration-300 shadow-sm',
-                        actionIconColor(rec.action_type)
+                        rec.status === 'pending' ? 'text-slate-900' : 'text-slate-400'
                     ]">
                         <span class="material-symbols-outlined text-[24px]">{{ actionIcon(rec.action_type) }}</span>
                     </div>
@@ -45,7 +45,7 @@
                     <!-- Content -->
                     <div class="flex-1 min-w-0">
                         <div class="flex flex-wrap items-center gap-3 mb-2">
-                            <h3 :class="['font-display text-lg font-bold tracking-tight', rec.status === 'dismissed' ? 'line-through text-slate-500' : 'text-slate-900 group-hover:text-primary transition-colors']">{{ rec.title }}</h3>
+                            <h3 :class="['font-display text-lg font-bold tracking-tight', rec.status === 'dismissed' ? 'line-through text-slate-500' : 'text-slate-900 group-hover:text-slate-900 transition-colors']">{{ rec.title }}</h3>
                             <span :class="[
                                 'inline-flex items-center px-2 py-0.5 rounded text-[9px] font-mono border uppercase tracking-[0.2em] font-bold',
                                 statusBadge(rec.status)
@@ -68,7 +68,7 @@
                         <!-- Actions (only for pending) -->
                         <div v-if="rec.status === 'pending'" class="flex items-center gap-3 mt-6">
                             <button @click="applyRecommendation(rec.id)"
-                                class="bg-primary text-white px-5 py-2 rounded-lg font-mono text-[10px] uppercase tracking-widest font-bold transition-all active:scale-95 shadow-glow">
+                                class="bg-slate-900 text-white px-5 py-2 rounded-lg font-mono text-[10px] uppercase tracking-widest font-bold transition-all active:scale-95 shadow-md">
                                 Apply Implementation
                             </button>
                             <button @click="dismissRecommendation(rec.id)"
@@ -84,18 +84,17 @@
                             <div class="text-[8px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-1.5 opacity-70">Confidence</div>
                             <div class="text-xl font-display font-bold text-slate-900 tracking-tighter">{{ rec.confidence_score }}%</div>
                             <div class="w-full h-1 bg-slate-200 mt-2 rounded-full overflow-hidden">
-                                <div class="h-full bg-primary rounded-full transition-all duration-1000" :style="{ width: rec.confidence_score + '%' }"></div>
+                                <div class="h-full bg-slate-900 rounded-full transition-all duration-1000" :style="{ width: rec.confidence_score + '%' }"></div>
                             </div>
                         </div>
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 min-w-[130px] shadow-sm group-hover:border-tertiary/20 transition-colors">
                             <div class="text-[8px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-1.5 opacity-70">Savings</div>
-                            <div class="text-xl font-display font-bold text-tertiary tracking-tighter">${{ rec.estimated_monthly_saving }}<span class="text-[10px] text-slate-500 ml-1 font-mono opacity-60">/mo</span></div>
+                            <div class="text-xl font-display font-bold text-slate-900 tracking-tighter">${{ rec.estimated_monthly_saving }}<span class="text-[10px] text-slate-500 ml-1 font-mono opacity-60">/mo</span></div>
                         </div>
                     </div>
                 </div>
                 <!-- Background decoration -->
-                <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
-                <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-primary/5 rounded-full blur-[80px] pointer-events-none group-hover:bg-primary/10 transition-all"></div>
+                <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-slate-900/5 rounded-full blur-[80px] pointer-events-none group-hover:bg-slate-900/10 transition-all"></div>
             </div>
             <div v-if="recommendations.length === 0" class="p-20 text-center bg-surface/30 border border-white/5 rounded-xl backdrop-blur-md">
                 <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/5">
@@ -129,8 +128,8 @@ const potentialSavings = computed(() => props.recommendations.filter(r => r.stat
 
 const actionIcon = (type) => ({ resize: 'straighten', delete: 'delete', schedule: 'schedule', lifecycle: 'autorenew' }[type] || 'auto_awesome');
 const actionIconBg = (type) => ({ resize: 'bg-primary/10', delete: 'bg-error/10', schedule: 'bg-secondary/10', lifecycle: 'bg-amber-500/10' }[type] || 'bg-primary/10');
-const actionIconColor = (type) => ({ resize: 'text-primary', delete: 'text-error', schedule: 'text-secondary', lifecycle: 'text-amber-500' }[type] || 'text-primary');
-const statusBadge = (status) => ({ pending: 'bg-primary/10 text-primary border-primary/20', applied: 'bg-tertiary/10 text-tertiary border-tertiary/20', dismissed: 'bg-surface-elevated text-content-variant border-border-ghost' }[status]);
+const actionIconColor = (type) => ({ resize: 'text-slate-900', delete: 'text-error', schedule: 'text-slate-600', lifecycle: 'text-slate-500' }[type] || 'text-slate-900');
+const statusBadge = (status) => ({ pending: 'bg-slate-900/10 text-slate-900 border-slate-900/20', applied: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20', dismissed: 'bg-surface-elevated text-content-variant border-border-ghost' }[status]);
 
 const refreshAnalysis = () => {
     isRefreshing.value = true;

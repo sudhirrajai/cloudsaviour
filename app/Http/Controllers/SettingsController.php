@@ -23,6 +23,7 @@ class SettingsController extends Controller
                 'aws_account_id' => $workspace->aws_account_id,
                 'has_aws_credentials' => $workspace->hasAwsCredentials(),
                 'created_at' => $workspace->created_at->format('F j, Y'),
+                'notification_settings' => $workspace->notification_settings,
             ],
         ]);
     }
@@ -73,7 +74,16 @@ class SettingsController extends Controller
 
     public function updateNotifications(Request $request)
     {
-        // Store notification preferences — for now, just flash success
+        $workspace = app('activeWorkspace');
+
+        $request->validate([
+            'prefs' => ['required', 'array'],
+        ]);
+
+        $workspace->update([
+            'notification_settings' => $request->prefs,
+        ]);
+
         return back()->with('success', 'Notification preferences saved.');
     }
 

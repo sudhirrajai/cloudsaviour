@@ -12,12 +12,13 @@ class Workspace extends Model
     protected $fillable = [
         'name', 'slug', 'owner_id',
         'aws_access_key', 'aws_secret_key', 'aws_region', 'aws_account_id',
-        'plan', 'plan_id', 'is_active', 'last_synced_at',
+        'plan', 'plan_id', 'is_active', 'last_synced_at', 'notification_settings',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'last_synced_at' => 'datetime',
+        'notification_settings' => 'array',
     ];
 
     // AWS credentials are encrypted at rest
@@ -101,5 +102,21 @@ class Workspace extends Model
     public function invitations(): HasMany
     {
         return $this->hasMany(WorkspaceInvitation::class);
+    }
+
+    public function shouldNotify(string $type): bool
+    {
+        $settings = $this->notification_settings ?? [];
+        
+        // If no settings exist yet, default to true for safety
+        if (empty($settings)) return true;
+
+        foreach ($settings as $pref) {
+            if (isset($pref['label']) && stripos($pref['label'], $type) !== false) {
+                return $pref['enabled'] ?? false;
+            }
+        }
+
+        return false;
     }
 }

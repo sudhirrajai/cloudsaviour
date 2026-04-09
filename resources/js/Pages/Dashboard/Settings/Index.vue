@@ -10,7 +10,7 @@
         <section class="bg-white rounded-lg border border-slate-900 p-8 mb-10 relative overflow-hidden group shadow-ambient">
             <div class="flex items-center gap-4 mb-8">
                 <div class="w-12 h-12 bg-white flex items-center justify-center rounded-2xl border border-slate-900 shadow-sm group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-primary text-[24px]">key</span>
+                    <span class="material-symbols-outlined text-slate-900 text-[24px]">key</span>
                 </div>
                 <div>
                     <h2 class="text-xl font-display font-bold text-slate-900 tracking-tight">AWS Infrastructure Connection</h2>
@@ -34,8 +34,8 @@
                         <button 
                             type="button"
                             @click="copyPolicy" 
-                            class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-600 hover:text-primary hover:border-primary transition-all flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest shadow-sm"
-                            :class="{ 'text-primary border-primary bg-primary/5': copied }"
+                            class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-600 hover:text-slate-900 hover:border-slate-900 transition-all flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest shadow-sm"
+                            :class="{ 'text-slate-900 border-slate-900 bg-slate-900/5': copied }"
                         >
                             <span class="material-symbols-outlined text-[14px]">{{ copied ? 'check' : 'content_copy' }}</span>
                             {{ copied ? 'Copied' : 'Copy' }}
@@ -43,7 +43,7 @@
                         <button 
                             type="button"
                             @click="downloadPolicy" 
-                            class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-600 hover:text-primary hover:border-primary transition-all flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest shadow-sm"
+                            class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-600 hover:text-slate-900 hover:border-slate-900 transition-all flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest shadow-sm"
                         >
                             <span class="material-symbols-outlined text-[14px]">download</span>
                             Download
@@ -61,7 +61,7 @@
                     <div class="space-y-2">
                         <label class="block text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-2 font-bold opacity-70">Primary AWS Region</label>
                         <div class="relative">
-                            <select v-model="awsForm.aws_region" class="w-full bg-white text-slate-900 text-sm font-mono border border-slate-900 rounded-lg px-4 py-3 focus:outline-none focus:border-primary appearance-none cursor-pointer hover:bg-slate-50 transition-all">
+                            <select v-model="awsForm.aws_region" class="w-full bg-white text-slate-900 text-sm font-mono border border-slate-900 rounded-lg px-4 py-3 focus:outline-none focus:border-slate-900 appearance-none cursor-pointer hover:bg-slate-50 transition-all">
                                 <option value="" disabled class="bg-white text-slate-900">Select Target Region</option>
                                 <option v-for="region in awsRegions" :key="region.value" :value="region.value" class="bg-white text-slate-900">
                                     {{ region.label }} ({{ region.value }})
@@ -72,12 +72,12 @@
                     </div>
                     <div class="space-y-2">
                         <label class="block text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-2 font-bold opacity-70">AWS Account ID</label>
-                        <input type="text" v-model="awsForm.aws_account_id" placeholder="123456789012" class="w-full bg-white text-slate-900 text-sm font-mono border border-slate-900 rounded-lg px-4 py-3 focus:outline-none focus:border-primary placeholder-slate-400 hover:bg-slate-50 transition-all" />
+                        <input type="text" v-model="awsForm.aws_account_id" placeholder="123456789012" class="w-full bg-white text-slate-900 text-sm font-mono border border-slate-900 rounded-lg px-4 py-3 focus:outline-none focus:border-slate-900 placeholder-slate-400 hover:bg-slate-50 transition-all" />
                     </div>
                     <div class="space-y-2">
                         <label class="block text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-2 font-bold opacity-70">IAM Access Key ID</label>
                         <div class="relative group/field">
-                            <input :type="showAccessKey ? 'text' : 'password'" v-model="awsForm.aws_access_key" placeholder="AKIA..." class="w-full bg-white text-slate-900 text-sm font-mono border border-slate-900 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:border-primary hover:bg-slate-50 transition-all" />
+                            <input :type="showAccessKey ? 'text' : 'password'" v-model="awsForm.aws_access_key" placeholder="AKIA..." class="w-full bg-white text-slate-900 text-sm font-mono border border-slate-900 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:border-slate-900 hover:bg-slate-50 transition-all" />
                             <button type="button" @click="showAccessKey = !showAccessKey" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900 transition-colors">
                                 <span class="material-symbols-outlined text-[18px]">{{ showAccessKey ? 'visibility_off' : 'visibility' }}</span>
                             </button>
@@ -86,7 +86,7 @@
                     <div class="space-y-2">
                         <label class="block text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-2 font-bold opacity-70">IAM Secret Access Key</label>
                         <div class="relative group/field">
-                            <input :type="showSecretKey ? 'text' : 'password'" v-model="awsForm.aws_secret_key" placeholder="••••••••••••••••••••" class="w-full bg-white text-slate-900 text-sm font-mono border border-slate-900 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:border-primary hover:bg-slate-50 transition-all" />
+                            <input :type="showSecretKey ? 'text' : 'password'" v-model="awsForm.aws_secret_key" placeholder="••••••••••••••••••••" class="w-full bg-white text-slate-900 text-sm font-mono border border-slate-900 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:border-slate-900 hover:bg-slate-50 transition-all" />
                             <button type="button" @click="showSecretKey = !showSecretKey" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900 transition-colors">
                                 <span class="material-symbols-outlined text-[18px]">{{ showSecretKey ? 'visibility_off' : 'visibility' }}</span>
                             </button>
@@ -105,14 +105,14 @@
                 </div>
             </form>
             <!-- Background element -->
-            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
+            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#0f172a 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
         </section>
  
         <!-- Workspace Settings Section -->
         <section class="bg-white rounded-lg border border-slate-900 p-8 mb-10 relative overflow-hidden group shadow-ambient">
             <div class="flex items-center gap-4 mb-8">
                 <div class="w-12 h-12 bg-white flex items-center justify-center rounded-2xl border border-slate-900 shadow-sm group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-secondary text-[24px]">settings</span>
+                    <span class="material-symbols-outlined text-slate-900 text-[24px]">settings</span>
                 </div>
                 <h2 class="text-xl font-display font-bold text-slate-900 tracking-tight">Workspace Identity</h2>
             </div>
@@ -121,7 +121,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                     <div class="space-y-2">
                         <label class="block text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-2 font-bold opacity-70">Display Name</label>
-                        <input type="text" v-model="workspaceForm.name" class="w-full bg-white text-slate-900 text-sm border border-slate-900 rounded-lg px-4 py-3 focus:outline-none focus:border-secondary hover:bg-slate-50 transition-all" />
+                        <input type="text" v-model="workspaceForm.name" class="w-full bg-white text-slate-900 text-sm border border-slate-900 rounded-lg px-4 py-3 focus:outline-none focus:border-slate-900 hover:bg-slate-50 transition-all" />
                     </div>
                     <div class="space-y-2">
                         <label class="block text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-2 font-bold opacity-70">Unique Workspace Identifier (Slug)</label>
@@ -133,8 +133,8 @@
                     <div class="space-y-2">
                         <label class="block text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-2 font-bold opacity-70">Current Subscription Plan</label>
                         <div class="flex items-center gap-4">
-                            <span class="inline-flex items-center px-4 py-2 rounded-lg text-[10px] font-mono bg-white text-secondary border border-slate-900 font-bold tracking-widest shadow-sm uppercase">{{ workspace.plan }} Plan</span>
-                            <a href="#" class="text-primary text-[11px] font-mono hover:text-slate-900 transition-colors uppercase tracking-widest font-bold border-b border-primary/30 pb-0.5">Upgrade Workspace →</a>
+                            <span class="inline-flex items-center px-4 py-2 rounded-lg text-[10px] font-mono bg-white text-slate-900 border border-slate-900 font-bold tracking-widest shadow-sm uppercase">{{ workspace.plan }} Plan</span>
+                            <a href="#" class="text-slate-900 text-[11px] font-mono hover:text-slate-600 transition-colors uppercase tracking-widest font-bold border-b border-slate-900/30 pb-0.5">Upgrade Workspace →</a>
                         </div>
                     </div>
                     <div class="space-y-2">
@@ -158,7 +158,7 @@
         <section class="bg-white rounded-lg border border-slate-900 p-8 mb-10 relative overflow-hidden group shadow-ambient">
             <div class="flex items-center gap-4 mb-8">
                 <div class="w-12 h-12 bg-white flex items-center justify-center rounded-2xl border border-slate-900 shadow-sm group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-tertiary text-[24px]">notifications</span>
+                    <span class="material-symbols-outlined text-slate-900 text-[24px]">notifications</span>
                 </div>
                 <h2 class="text-xl font-display font-bold text-slate-900 tracking-tight">Intelligence & Alerts</h2>
             </div>
@@ -236,7 +236,7 @@ const workspaceForm = useForm({
     name: props.workspace.name,
 });
 
-const notificationPrefs = ref([
+const notificationPrefs = ref(props.workspace.notification_settings || [
     { label: 'Email notifications for server status changes', enabled: true },
     { label: 'Email notifications for idle resource detection', enabled: true },
     { label: 'Email notifications for scheduled action failures', enabled: false },

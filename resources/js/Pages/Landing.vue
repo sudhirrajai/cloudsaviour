@@ -29,43 +29,43 @@ const features = [
         title: 'Smart Scheduler',
         description: 'Automate EC2 and RDS instances with precision. Save up to 70% on idle costs.',
         icon: Clock,
-        color: 'text-indigo-400',
-        bg: 'bg-indigo-400/10'
+        color: 'text-slate-900',
+        bg: 'bg-slate-900/10'
     },
     {
         title: 'Cost Analytics',
         description: 'Real-time AWS Cost Explorer integration. Visualize your savings and spending trends.',
         icon: BarChart3,
-        color: 'text-emerald-400',
-        bg: 'bg-emerald-400/10'
+        color: 'text-slate-600',
+        bg: 'bg-slate-600/10'
     },
     {
         title: 'Idle Scanner',
         description: 'Automatically detect unattached EBS volumes or idle instances and take action.',
         icon: Search,
-        color: 'text-blue-400',
-        bg: 'bg-blue-400/10'
+        color: 'text-slate-500',
+        bg: 'bg-slate-500/10'
     },
     {
         title: 'Security Audits',
         description: 'Every automated action is logged with detailed metadata for full compliance.',
         icon: ShieldCheck,
-        color: 'text-purple-400',
-        bg: 'bg-purple-400/10'
+        color: 'text-slate-900',
+        bg: 'bg-slate-900/10'
     },
     {
         title: 'Instance Actions',
         description: 'Start, Stop, Terminate, or Delete resources directly from your unified dashboard.',
         icon: Zap,
-        color: 'text-rose-400',
-        bg: 'bg-rose-400/10'
+        color: 'text-slate-900',
+        bg: 'bg-slate-900/10'
     },
     {
         title: 'Multi-Workspace',
         description: 'Manage multiple AWS accounts and regions from a single professional interface.',
         icon: Cloud,
-        color: 'text-indigo-400',
-        bg: 'bg-indigo-400/10'
+        color: 'text-slate-900',
+        bg: 'bg-slate-900/10'
     }
 ];
 
@@ -99,9 +99,9 @@ const roadmap = [
         
         <!-- Animated Background Mesh -->
         <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-            <div class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary/5 blur-[140px] rounded-full animate-pulse"></div>
-            <div class="absolute top-[10%] -right-[15%] w-[50%] h-[50%] bg-emerald-500/5 blur-[120px] rounded-full animate-pulse" style="animation-delay: 2s"></div>
-            <div class="absolute bottom-[-10%] left-[10%] w-[60%] h-[60%] bg-blue-500/5 blur-[140px] rounded-full animate-pulse" style="animation-delay: 4s"></div>
+            <div class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-slate-900/5 blur-[140px] rounded-full animate-pulse"></div>
+            <div class="absolute top-[10%] -right-[15%] w-[50%] h-[50%] bg-slate-400/5 blur-[120px] rounded-full animate-pulse" style="animation-delay: 2s"></div>
+            <div class="absolute bottom-[-10%] left-[10%] w-[60%] h-[60%] bg-slate-600/5 blur-[140px] rounded-full animate-pulse" style="animation-delay: 4s"></div>
         </div>
 
         <!-- Navbar -->
@@ -111,8 +111,8 @@ const roadmap = [
                     <div class="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center border border-white shadow-md">
                         <Cloud class="w-6 h-6 text-white" />
                     </div>
-                    <span class="text-2xl font-black tracking-tighter text-slate-900">
-                        Cloud<span class="text-primary">Saviour</span>
+                    <span class="text-2xl font-black tracking-tighter text-slate-900 uppercase">
+                        Cloud<span class="text-slate-500">Saviour</span>
                     </span>
                 </div>
 
@@ -122,7 +122,7 @@ const roadmap = [
                         <a href="#roadmap" class="hover:text-slate-900 transition-colors">Roadmap</a>
                         <Link :href="route('login')" class="hover:text-slate-900 transition-colors">Sign In</Link>
                     </nav>
-                    <Link :href="route('register')" class="px-6 py-2.5 bg-slate-900 text-white border border-slate-900 rounded-lg font-black text-xs uppercase tracking-widest hover:bg-slate-800 hover:shadow-[0_0_20px_rgba(37,99,235,0.15)] hover:scale-[1.05] active:scale-95 transition-all duration-300 shadow-md">
+                    <Link :href="route('register')" class="px-6 py-2.5 bg-slate-900 text-white border border-slate-900 rounded-lg font-black text-xs uppercase tracking-widest hover:bg-slate-800 hover:shadow-[0_0_20px_rgba(15,23,42,0.15)] hover:scale-[1.05] active:scale-95 transition-all duration-300 shadow-md">
                         Get Started
                     </Link>
                 </div>
@@ -139,8 +139,8 @@ const roadmap = [
                     class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] md:text-xs font-bold mb-6 md:mb-8"
                 >
                     <span class="relative flex h-1.5 w-1.5">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-900 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-slate-900"></span>
                     </span>
                     BETA ACCESS NOW OPEN
                 </div>
@@ -152,7 +152,7 @@ const roadmap = [
                     class="text-4xl md:text-6xl font-[800] tracking-tight text-content mb-6 md:mb-8 leading-[1.05]"
                 >
                     Automate Cloud.<br/>
-                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary via-emerald-500 to-blue-500">
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-600 to-slate-400 uppercase">
                         Minimize Waste.
                     </span>
                 </h1>
@@ -174,7 +174,7 @@ const roadmap = [
                     :enter="{ opacity: 1, scale: 1, transition: { delay: 300, duration: 800 } }"
                     class="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6"
                 >
-                    <Link :href="route('register')" class="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-2xl font-extrabold text-lg hover:shadow-glow hover:-translate-y-1 transition-all group flex items-center justify-center gap-3">
+                    <Link :href="route('register')" class="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white rounded-2xl font-extrabold text-lg hover:shadow-md hover:-translate-y-1 transition-all group flex items-center justify-center gap-3">
                         Start Free Trial
                         <ArrowRight class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </Link>
@@ -195,7 +195,7 @@ const roadmap = [
                         class="relative transition-transform duration-700 ease-out preserve-3d group"
                         :style="{ transform: `rotateX(${Math.max(0, 15 - scrollY / 50)}deg) translateY(${Math.min(0, scrollY / 10)}px)` }"
                     >
-                        <div class="absolute -inset-2 bg-gradient-to-r from-primary/30 via-emerald-400/20 to-blue-400/30 blur-3xl rounded-[2.5rem] group-hover:opacity-100 opacity-50 transition-opacity"></div>
+                        <div class="absolute -inset-2 bg-gradient-to-r from-slate-900/30 via-slate-400/20 to-slate-200/30 blur-3xl rounded-[2.5rem] group-hover:opacity-100 opacity-50 transition-opacity"></div>
                         <div class="relative bg-white border border-border-ghost rounded-[2rem] overflow-hidden shadow-ambient aspect-video">
                             <img 
                                 src="/images/dashboard-preview.png" 
@@ -243,11 +243,11 @@ const roadmap = [
                     </div>
                     <div v-motion-slide-visible-bottom :delay="100">
                         <div class="text-5xl md:text-6xl font-black text-content mb-4 tracking-tighter">0M</div>
-                        <div class="text-emerald-500 font-bold uppercase tracking-widest text-[10px] md:text-xs">Wasted Resources</div>
+                        <div class="text-slate-600 font-bold uppercase tracking-widest text-[10px] md:text-xs">Wasted Resources</div>
                     </div>
                     <div v-motion-slide-visible-bottom :delay="200">
                         <div class="text-5xl md:text-6xl font-black text-content mb-4 tracking-tighter">100%</div>
-                        <div class="text-blue-500 font-bold uppercase tracking-widest text-[10px] md:text-xs">Automated Compliance</div>
+                        <div class="text-slate-400 font-bold uppercase tracking-widest text-[10px] md:text-xs">Automated Compliance</div>
                     </div>
                 </div>
             </div>
@@ -301,7 +301,7 @@ const roadmap = [
                 <div class="p-10 md:p-20 bg-gradient-to-br from-primary/10 via-white to-slate-50 border border-border-ghost rounded-[2.5rem] md:rounded-[4rem] relative overflow-hidden shadow-ambient">
                     <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.05),transparent)]"></div>
                     <h2 class="text-3xl md:text-5xl font-black text-content mb-8 md:mb-10 tracking-tight leading-tight">Ready to stop burning your cloud budget?</h2>
-                    <Link :href="route('register')" class="inline-flex items-center gap-3 md:gap-4 px-8 py-4 md:px-12 md:py-6 bg-primary text-white rounded-[1.5rem] md:rounded-[2rem] font-black text-xl md:text-2xl hover:scale-105 active:scale-95 transition-all shadow-glow">
+                    <Link :href="route('register')" class="inline-flex items-center gap-3 md:gap-4 px-8 py-4 md:px-12 md:py-6 bg-slate-900 text-white rounded-[1.5rem] md:rounded-[2rem] font-black text-xl md:text-2xl hover:scale-105 active:scale-95 transition-all shadow-md">
                         Get Beta Access
                         <ArrowRight class="w-6 h-6 md:w-8 md:h-8" />
                     </Link>

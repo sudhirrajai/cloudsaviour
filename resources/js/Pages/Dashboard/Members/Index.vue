@@ -6,7 +6,7 @@
                 <h1 class="text-4xl lg:text-5xl font-display font-bold tracking-tight text-slate-900 mb-2">Team Members</h1>
                 <p class="text-content-variant font-sans">Manage your workspace team and access permissions.</p>
             </div>
-            <button class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-sm font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 active:scale-95 transition-all shadow-glow">
+            <button class="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-sm font-mono text-[11px] uppercase tracking-wider font-bold flex items-center gap-3 active:scale-95 transition-all shadow-md">
                 <span class="material-symbols-outlined text-sm">person_add</span>
                 Invite Member
             </button>
@@ -23,9 +23,9 @@
         <!-- Members Table -->
         <section class="bg-white rounded-lg border border-slate-900 overflow-hidden relative mb-10 shadow-ambient">
             <div class="bg-slate-50 px-6 py-4 border-b border-slate-900 flex items-center gap-3">
-                <span class="material-symbols-outlined text-primary text-[20px] shadow-glow">groups</span>
+                <span class="material-symbols-outlined text-slate-900 text-[20px]">groups</span>
                 <span class="text-sm font-semibold text-slate-900 tracking-wide">Active Workspace Members</span>
-                <span class="bg-primary/20 text-primary text-[10px] font-mono px-2 py-0.5 rounded-full border border-primary/30">{{ members.length }}</span>
+                <span class="bg-slate-900/10 text-slate-900 text-[10px] font-mono px-2 py-0.5 rounded-full border border-slate-900/20">{{ members.length }}</span>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[800px]">
@@ -46,8 +46,8 @@
                                         {{ member.initials }}
                                     </div>
                                     <div class="flex flex-col">
-                                        <span class="text-sm font-semibold text-slate-900 group-hover:text-primary transition-colors">{{ member.name }}</span>
-                                        <span v-if="member.id === $page.props.auth.user.id" class="text-[9px] font-mono text-primary uppercase tracking-widest mt-0.5 font-bold">You</span>
+                                        <span class="text-sm font-semibold text-slate-900 group-hover:text-slate-900 transition-colors">{{ member.name }}</span>
+                                        <span v-if="member.id === $page.props.auth.user.id" class="text-[9px] font-mono text-slate-900 uppercase tracking-widest mt-0.5 font-bold">You</span>
                                     </div>
                                 </div>
                             </td>
@@ -66,14 +66,14 @@
                             </td>
                             <td class="px-6 py-5">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-tertiary shadow-glow shadow-tertiary/50"></span>
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-900"></span>
                                     <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest opacity-70">Active Now</span>
                                 </div>
                             </td>
                             <td class="px-6 py-5 text-right">
                                 <div class="flex items-center justify-end gap-3">
                                     <template v-if="member.role !== 'owner' && member.id !== $page.props.auth.user.id">
-                                        <select @change="updateRole(member.id, $event.target.value)" class="bg-white text-slate-900 text-[10px] font-mono border border-slate-300 rounded-lg px-3 py-1.5 appearance-none cursor-pointer focus:outline-none focus:border-primary/50 transition-all hover:bg-slate-50 shadow-sm">
+                                        <select @change="updateRole(member.id, $event.target.value)" class="bg-white text-slate-900 text-[10px] font-mono border border-slate-300 rounded-lg px-3 py-1.5 appearance-none cursor-pointer focus:outline-none focus:border-slate-900 transition-all hover:bg-slate-50 shadow-sm">
                                             <option v-for="role in ['admin', 'developer', 'viewer']" :key="role" :value="role" :selected="member.role === role">{{ role.toUpperCase() }}</option>
                                         </select>
                                         <button @click="removeMember(member.id)" class="w-8 h-8 rounded-lg flex items-center justify-center text-error/60 hover:text-error hover:bg-error/10 transition-all border border-transparent hover:border-error/20 active:scale-90">
@@ -87,7 +87,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
+            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#0f172a 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
         </section>
 
         <!-- Pending Invitations -->
@@ -120,7 +120,7 @@
                             <td class="px-6 py-5"><span class="font-mono text-[10px] text-slate-500 uppercase tracking-widest">{{ inv.expires_at }}</span></td>
                             <td class="px-6 py-5 text-right">
                                 <div class="flex items-center justify-end gap-3">
-                                    <button class="bg-primary text-white px-4 py-2 rounded-lg text-[10px] font-mono uppercase tracking-widest font-bold transition-all active:scale-95 shadow-sm">Resend</button>
+                                    <button class="bg-slate-900 text-white px-4 py-2 rounded-lg text-[10px] font-mono uppercase tracking-widest font-bold transition-all active:scale-95 shadow-sm">Resend</button>
                                     <button class="bg-white hover:bg-slate-50 text-error border border-slate-200 px-4 py-2 rounded-lg text-[10px] font-mono uppercase tracking-widest font-bold transition-all active:scale-95 shadow-sm">Revoke</button>
                                 </div>
                             </td>
@@ -128,7 +128,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
+            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#0f172a 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
         </section>
     </DashboardLayout>
 </template>
@@ -154,18 +154,18 @@ const adminCount = computed(() => props.members.filter(m => m.role === 'admin').
 const devCount = computed(() => props.members.filter(m => m.role === 'developer').length);
 
 const roleBadge = (role) => ({
-    owner: 'bg-secondary/10 text-secondary border-secondary/20',
-    admin: 'bg-primary/10 text-primary border-primary/20',
-    developer: 'bg-tertiary/10 text-tertiary border-tertiary/20',
+    owner: 'bg-slate-900/10 text-slate-900 border-slate-900/20',
+    admin: 'bg-slate-800/10 text-slate-800 border-slate-800/20',
+    developer: 'bg-slate-600/10 text-slate-600 border-slate-600/20',
     viewer: 'bg-surface-elevated text-content-variant border-border-ghost',
 }[role] || 'bg-surface-elevated text-content-variant border-border-ghost');
 
 const avatarBg = (role) => ({
-    owner: 'bg-secondary/60',
-    admin: 'bg-primary/60',
-    developer: 'bg-tertiary/60',
-    viewer: 'bg-slate-600/60',
-}[role] || 'bg-slate-600/60');
+    owner: 'bg-slate-900',
+    admin: 'bg-slate-800',
+    developer: 'bg-slate-600',
+    viewer: 'bg-slate-500',
+}[role] || 'bg-slate-500');
 
 const updateRole = (userId, role) => {
     router.post(`/dashboard/members/${userId}/role`, { role }, {

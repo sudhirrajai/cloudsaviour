@@ -26,14 +26,14 @@
             <StatCard :label="activePeriod === 'last_30_days' ? 'Total Spend' : (activePeriod === 'last_month' ? 'Last Month' : 'This Month')"  :sublabel="currentMonth" icon="attach_money" borderColor="slate-900" valueColor="slate-900">
                 <span class="font-mono">${{ computedData.total.toLocaleString() }}</span>
             </StatCard>
-            <StatCard label="Forecast" sublabel="MONTH-END ESTIMATE" icon="trending_up" borderColor="secondary">
-                <span class="font-mono text-secondary">${{ (computedData.total * 1.1).toLocaleString(undefined, {maximumFractionDigits: 0}) }}</span>
+            <StatCard label="Forecast" sublabel="MONTH-END ESTIMATE" icon="trending_up" borderColor="slate-600">
+                <span class="font-mono text-slate-600">${{ (computedData.total * 1.1).toLocaleString(undefined, {maximumFractionDigits: 0}) }}</span>
             </StatCard>
-            <StatCard label="Daily Average" sublabel="BASED ON 30 DAYS" icon="analytics" borderColor="tertiary">
-                <span class="font-mono text-tertiary">${{ (computedData.total / 30).toLocaleString(undefined, {maximumFractionDigits: 2}) }}</span>
+            <StatCard label="Daily Average" sublabel="BASED ON 30 DAYS" icon="analytics" borderColor="slate-400">
+                <span class="font-mono text-slate-500">${{ (computedData.total / 30).toLocaleString(undefined, {maximumFractionDigits: 2}) }}</span>
             </StatCard>
-            <StatCard label="Top Service" :sublabel="topServiceLabel" icon="cloud" borderColor="amber">
-                <span class="text-amber-400">{{ topServiceName }}</span>
+            <StatCard label="Top Service" :sublabel="topServiceLabel" icon="cloud" borderColor="slate-900">
+                <span class="text-slate-900">{{ topServiceName }}</span>
             </StatCard>
         </div>
 
@@ -62,7 +62,7 @@
                     <div class="text-lg font-mono font-bold text-slate-900">${{ service.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</div>
                 </div>
             </div>
-            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
+            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#0f172a 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
         </section>
 
         <!-- Service Breakdown Table -->
@@ -86,7 +86,7 @@
                             <td class="px-6 py-5">
                                 <div class="flex items-center gap-4">
                                     <div class="w-3 h-3 rounded-sm shadow-sm" :style="{ backgroundColor: getServiceColor(service.name) }"></div>
-                                    <span class="text-sm font-semibold text-slate-900 group-hover:text-primary transition-colors">{{ service.name }}</span>
+                                    <span class="text-sm font-semibold text-slate-900 group-hover:text-slate-900 transition-colors">{{ service.name }}</span>
                                 </div>
                             </td>
                             <td class="px-6 py-5">
@@ -98,7 +98,7 @@
                             <td class="px-6 py-5" v-if="activePeriod === 'this_month'">
                                 <div :class="[
                                     'font-mono text-xs flex items-center gap-1.5 px-2 py-1 rounded w-fit',
-                                    service.change > 0 ? 'bg-error/10 text-error' : service.change < 0 ? 'bg-tertiary/10 text-tertiary' : 'bg-white/5 text-content-variant'
+                                    service.change > 0 ? 'bg-slate-900/10 text-slate-900 font-bold' : service.change < 0 ? 'bg-slate-500/10 text-slate-500' : 'bg-white/5 text-content-variant'
                                 ]">
                                     <span v-if="service.change > 0" class="material-symbols-outlined text-[14px]">trending_up</span>
                                     <span v-else-if="service.change < 0" class="material-symbols-outlined text-[14px]">trending_down</span>
@@ -120,7 +120,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
+            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#0f172a 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
         </section>
     </DashboardLayout>
 </template>
@@ -223,15 +223,15 @@ const topServiceLabel = computed(() => {
 
 const getServiceColor = (name) => {
     const colors = {
-        'Amazon Elastic Compute Cloud - Compute': '#3b82f6',
-        'Amazon Relational Database Service': '#8b5cf6',
-        'Amazon Simple Storage Service': '#4edea3',
-        'AmazonCloudWatch': '#f59e0b',
-        'AWS Lambda': '#f43f5e',
-        'Elastic Load Balancing': '#06b6d4',
-        'Tax': '#94a3b8',
-        'AWS Backup': '#6366f1',
-        'Amazon Route 53': '#f97316',
+        'Amazon Elastic Compute Cloud - Compute': '#0f172a',
+        'Amazon Relational Database Service': '#334155',
+        'Amazon Simple Storage Service': '#475569',
+        'AmazonCloudWatch': '#64748b',
+        'AWS Lambda': '#94a3b8',
+        'Elastic Load Balancing': '#cbd5e1',
+        'Tax': '#e2e8f0',
+        'AWS Backup': '#1e293b',
+        'Amazon Route 53': '#3d4763',
     };
     
     // Fallback logic for shorthand names or partial matches
@@ -239,7 +239,7 @@ const getServiceColor = (name) => {
     if (name.includes('Compute')) return colors['Amazon Elastic Compute Cloud - Compute'];
     if (name.includes('Database')) return colors['Amazon Relational Database Service'];
     
-    return '#64748b';
+    return '#94a3b8';
 };
 </script>
 

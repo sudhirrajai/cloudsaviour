@@ -63,6 +63,12 @@ class ServerController extends Controller
             return back()->with('error', 'Failed to start instance: ' . $e->getMessage());
         }
 
+        if ($workspace->shouldNotify('server status changes')) {
+            \Illuminate\Support\Facades\Mail::to($workspace->owner->email)->send(
+                new \App\Mail\ServerStatusAlertMail($workspace->name, $instanceId, 'start')
+            );
+        }
+
         return back()->with('success', "Starting {$instanceId}...");
     }
 
@@ -94,6 +100,12 @@ class ServerController extends Controller
             }
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to stop instance: ' . $e->getMessage());
+        }
+
+        if ($workspace->shouldNotify('server status changes')) {
+            \Illuminate\Support\Facades\Mail::to($workspace->owner->email)->send(
+                new \App\Mail\ServerStatusAlertMail($workspace->name, $instanceId, 'stop')
+            );
         }
 
         return back()->with('success', "Stopping {$instanceId}...");

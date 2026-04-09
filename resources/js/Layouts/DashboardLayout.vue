@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-primary selection:text-white">
+    <div class="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-slate-900 selection:text-white">
         <!-- Mobile sidebar overlay -->
         <div v-if="sidebarOpen" class="fixed inset-0 bg-black/60 z-50 lg:hidden" @click="sidebarOpen = false"></div>
 
@@ -11,7 +11,7 @@
             <!-- Logo -->
             <div class="h-16 flex items-center px-6 border-b border-slate-900 shrink-0">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-glow">
+                    <div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center shadow-md">
                         <span class="material-symbols-outlined text-white text-[20px]">bolt</span>
                     </div>
                     <span class="font-display font-bold text-xl tracking-tight text-content">CloudSaviour</span>
@@ -92,7 +92,7 @@
                     <div class="flex items-center gap-3 font-mono text-xs relative" v-if="$page.props.activeWorkspace">
                         <span class="text-slate-500 uppercase tracking-[0.2em] opacity-60 text-[9px] font-bold">Workspace</span>
                         <div @click.stop="toggleDropdown('workspace')" class="dropdown-trigger flex items-center gap-2.5 bg-white px-3 py-1.5 rounded-lg border border-slate-300 shadow-sm group cursor-pointer hover:border-slate-900 transition-all">
-                            <span class="w-2 h-2 rounded-full bg-tertiary shadow-glow shadow-tertiary/40"></span>
+                            <span class="w-2 h-2 rounded-full bg-slate-900 shadow-md"></span>
                             <span class="text-content font-bold tracking-wide">{{ $page.props.activeWorkspace.name }}</span>
                             <span class="material-symbols-outlined text-[16px] text-slate-500 group-hover:text-content transition-colors">unfold_more</span>
                         </div>
@@ -110,10 +110,10 @@
                                             @click="switchWorkspace(ws.id)"
                                             :class="[
                                                 'w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group',
-                                                ws.id === $page.props.activeWorkspace.id ? 'bg-primary/20 text-primary' : 'text-content-variant hover:bg-slate-100 hover:text-primary'
+                                                ws.id === $page.props.activeWorkspace.id ? 'bg-slate-900/10 text-slate-900' : 'text-content-variant hover:bg-slate-100 hover:text-slate-900'
                                             ]"
                                         >
-                                            <span :class="['w-1.5 h-1.5 rounded-full', ws.id === $page.props.activeWorkspace.id ? 'bg-primary shadow-glow' : 'bg-slate-300']"></span>
+                                            <span :class="['w-1.5 h-1.5 rounded-full', ws.id === $page.props.activeWorkspace.id ? 'bg-slate-900 shadow-md' : 'bg-slate-300']"></span>
                                             <span class="text-sm font-medium">{{ ws.name }}</span>
                                             <span v-if="ws.id === $page.props.activeWorkspace.id" class="material-symbols-outlined text-xs ml-auto">check</span>
                                         </button>
@@ -132,7 +132,7 @@
                 <div class="flex items-center gap-5">
                     <!-- Notifications Dropdown -->
                     <div class="relative">
-                        <button @click.stop="toggleDropdown('notifications')" class="dropdown-trigger text-content-variant hover:text-primary transition-all relative p-2 hover:bg-slate-100 rounded-full group">
+                        <button @click.stop="toggleDropdown('notifications')" class="dropdown-trigger text-content-variant hover:text-slate-900 transition-all relative p-2 hover:bg-slate-100 rounded-full group">
                             <span class="material-symbols-outlined text-[22px]">notifications</span>
                             <span v-if="$page.props.notifications?.length > 0" class="absolute top-2.5 right-2.5 w-2 h-2 bg-error rounded-full ring-2 ring-white group-hover:scale-125 transition-transform"></span>
                         </button>
@@ -166,7 +166,7 @@
                                     </div>
                                 </div>
                                 <div class="mt-4 pt-3 border-t border-border-ghost text-center" v-if="$page.props.notifications?.length > 0">
-                                    <Link href="/dashboard/activity" class="text-[10px] text-content-variant hover:text-primary transition-colors">View all activity</Link>
+                                    <Link href="/dashboard/activity" class="text-[10px] text-content-variant hover:text-slate-900 transition-colors">View all activity</Link>
                                 </div>
                                 </div>
                             </div>
@@ -190,15 +190,15 @@
                                         <div class="text-xs text-content-variant truncate">{{ $page.props.auth.user.email }}</div>
                                     </div>
                                     <div class="space-y-1">
-                                        <Link href="/dashboard/settings" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-content-variant hover:bg-slate-100 hover:text-primary transition-colors">
+                                        <Link href="/dashboard/settings" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-content-variant hover:bg-slate-100 hover:text-slate-900 transition-colors">
                                             <span class="material-symbols-outlined text-[18px]">account_circle</span>
                                             My Profile
                                         </Link>
-                                        <Link href="/dashboard/settings" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-content-variant hover:bg-slate-100 hover:text-primary transition-colors">
+                                        <Link href="/dashboard/settings" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-content-variant hover:bg-slate-100 hover:text-slate-900 transition-colors">
                                             <span class="material-symbols-outlined text-[18px]">security</span>
                                             Security
                                         </Link>
-                                        <Link href="/dashboard/cost" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-content-variant hover:bg-slate-100 hover:text-primary transition-colors">
+                                        <Link href="/dashboard/cost" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-content-variant hover:bg-slate-100 hover:text-slate-900 transition-colors">
                                             <span class="material-symbols-outlined text-[18px]">payments</span>
                                             Billing
                                         </Link>

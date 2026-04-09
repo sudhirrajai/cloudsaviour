@@ -32,7 +32,7 @@
                                 v-model="form.name" 
                                 type="text" 
                                 required
-                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-primary transition-all placeholder:text-slate-400 shadow-sm"
+                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all placeholder:text-slate-400 shadow-sm"
                                 placeholder="e.g., Nightly Shutdown"
                             />
                             <div v-if="form.errors.name" class="mt-1 text-xs text-error">{{ form.errors.name }}</div>
@@ -43,7 +43,7 @@
                             <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Resource Type</label>
                             <select 
                                 v-model="form.resource_type" 
-                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-primary transition-all appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
+                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
                             >
                                 <option value="ec2" class="bg-white text-slate-900">EC2 Instance</option>
                                 <option value="rds" class="bg-white text-slate-900">RDS Instance</option>
@@ -56,7 +56,7 @@
                             <select 
                                 v-model="form.resource_id" 
                                 required
-                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-primary transition-all disabled:opacity-50 appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
+                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all disabled:opacity-50 appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
                                 :disabled="!availableInstances.length"
                             >
                                 <option value="" disabled class="bg-white text-slate-400">Select an instance</option>
@@ -76,7 +76,7 @@
                                         type="button"
                                         @click="form.action = 'start'"
                                         class="flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-2 border shadow-sm"
-                                        :class="form.action === 'start' ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-900 hover:border-slate-900'"
+                                        :class="form.action === 'start' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-900 hover:border-slate-900'"
                                     >
                                         <span class="material-symbols-outlined text-[18px]">play_arrow</span> Start
                                     </button>
@@ -84,7 +84,7 @@
                                         type="button"
                                         @click="form.action = 'stop'"
                                         class="flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-2 border shadow-sm"
-                                        :class="form.action === 'stop' ? 'bg-amber-500 text-white border-amber-600' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-900 hover:border-slate-900'"
+                                        :class="form.action === 'stop' ? 'bg-slate-700 text-white border-slate-800' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-900 hover:border-slate-900'"
                                     >
                                         <span class="material-symbols-outlined text-[18px]">stop</span> Stop
                                     </button>
@@ -101,8 +101,7 @@
                                                 v-if="form.resource_type === 'ec2'"
                                                 type="button"
                                                 @click="form.action = 'terminate'"
-                                                class="flex-1 sm:flex-none px-5 py-2.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 border border-rose-200 text-rose-500 hover:text-white hover:bg-rose-500 group/btn shadow-sm"
-                                                :class="form.action === 'terminate' ? 'bg-rose-500 text-white border-rose-600 shadow-glow' : 'bg-white'"
+                                                :class="form.action === 'terminate' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
                                                 title="This will permanently destroy the instance"
                                             >
                                                 <span class="material-symbols-outlined text-[16px]">delete_forever</span> Terminate
@@ -111,8 +110,7 @@
                                                 v-if="form.resource_type === 'rds'"
                                                 type="button"
                                                 @click="form.action = 'delete'"
-                                                class="flex-1 lg:flex-none px-5 py-2.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 border border-rose-200 text-rose-500 hover:text-white hover:bg-rose-500 group/btn shadow-sm"
-                                                :class="form.action === 'delete' ? 'bg-rose-500 text-white border-rose-600 shadow-glow' : 'bg-white'"
+                                                :class="form.action === 'delete' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
                                                 title="This will permanently delete the database"
                                             >
                                                 <span class="material-symbols-outlined text-[16px]">heart_broken</span> Delete DB
@@ -147,7 +145,7 @@
                                 v-model="form.time_of_day" 
                                 type="time" 
                                 required
-                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-[11px] text-slate-900 focus:outline-none focus:border-primary transition-all font-mono font-bold shadow-sm"
+                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-[11px] text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-mono font-bold shadow-sm"
                             />
                             <div v-if="form.errors.time_of_day" class="mt-1 text-xs text-error font-bold">{{ form.errors.time_of_day }}</div>
                         </div>
@@ -156,7 +154,7 @@
                             <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Timezone</label>
                             <select 
                                 v-model="form.timezone" 
-                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-primary transition-all font-mono appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
+                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-mono appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
                             >
                                 <option v-for="tz in availableTimezones" :key="tz" :value="tz" class="bg-white text-slate-900">{{ tz }}</option>
                             </select>

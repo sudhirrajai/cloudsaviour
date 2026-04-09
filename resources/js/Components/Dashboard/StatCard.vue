@@ -27,13 +27,13 @@ const props = defineProps({
 });
 
 const colorMap = {
-    primary: { border: 'border-l-4 border-l-primary', icon: 'text-primary', value: 'text-slate-900' },
-    secondary: { border: 'border-l-4 border-l-secondary', icon: 'text-secondary', value: 'text-slate-900' },
-    tertiary: { border: 'border-l-4 border-l-tertiary', icon: 'text-tertiary', value: 'text-slate-900' },
-    error: { border: 'border-l-4 border-l-error', icon: 'text-error', value: 'text-slate-900' },
-    amber: { border: 'border-l-4 border-l-amber-500', icon: 'text-amber-500', value: 'text-slate-900' },
-    white: { border: 'border-l-4 border-l-primary', icon: 'text-primary', value: 'text-slate-900' },
-    grey: { border: 'border-l-4 border-l-slate-400', icon: 'text-slate-500', value: 'text-slate-900' },
+    primary: { border: 'bg-white', icon: 'text-slate-900', value: 'text-slate-900' },
+    secondary: { border: 'bg-white', icon: 'text-slate-900', value: 'text-slate-900' },
+    tertiary: { border: 'bg-white', icon: 'text-slate-900', value: 'text-slate-900' },
+    error: { border: 'bg-white', icon: 'text-slate-900', value: 'text-slate-900' },
+    amber: { border: 'bg-white', icon: 'text-slate-900', value: 'text-slate-900' },
+    white: { border: 'bg-white', icon: 'text-slate-900', value: 'text-slate-900' },
+    grey: { border: 'bg-white', icon: 'text-slate-900', value: 'text-slate-900' },
 };
 
 const colorSet = colorMap[props.borderColor] || colorMap.primary;

@@ -1,16 +1,16 @@
 <template>
-    <tr class="hover:bg-slate-800/20 transition-colors group">
+    <tr class="hover:bg-slate-50 transition-colors group">
         <td class="px-6 py-6 align-top">
             <div class="w-10 h-10 flex items-center justify-center rounded" :class="meta.iconBgClass">
                 <span class="material-symbols-outlined" :class="meta.iconColorClass">{{ meta.icon }}</span>
             </div>
         </td>
         <td class="px-6 py-6 align-top">
-            <div class="text-sm font-semibold text-white mb-1" :class="{'line-through text-on-surface-variant opacity-50': resource.is_ignored}">
+            <div class="text-sm font-black text-slate-900 mb-1" :class="{'line-through opacity-50': resource.is_ignored}">
                 {{ typeLabel }}
             </div>
-            <div class="font-mono text-[11px] text-content-variant">
-                {{ resource.resource_id }} <span v-if="resource.resource_name">({{ resource.resource_name }})</span>
+            <div class="font-mono text-[11px] text-slate-500 font-bold opacity-80">
+                {{ resource.resource_id }} <span v-if="resource.resource_name" class="opacity-60">({{ resource.resource_name }})</span>
             </div>
         </td>
         <td class="px-6 py-6 align-top">

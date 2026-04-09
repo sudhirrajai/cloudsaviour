@@ -6,7 +6,7 @@
                 <h1 class="text-4xl lg:text-5xl font-display font-bold tracking-tight text-slate-900 mb-2">Schedules</h1>
                 <p class="text-slate-600 font-sans">Automate start/stop actions for your EC2 and RDS instances.</p>
             </div>
-            <button @click="openModal()" class="bg-slate-900 hover:bg-slate-800 hover:shadow-[0_0_20px_rgba(37,99,235,0.15)] text-white px-6 py-2.5 rounded-lg border border-slate-900 font-mono text-[11px] uppercase tracking-widest font-black flex items-center gap-3 active:scale-95 transition-all duration-300 shadow-md">
+            <button @click="openModal()" class="bg-slate-900 hover:bg-slate-800 hover:shadow-[0_0_20px_rgba(15,23,42,0.15)] text-white px-6 py-2.5 rounded-lg border border-slate-900 font-mono text-[11px] uppercase tracking-widest font-black flex items-center gap-3 active:scale-95 transition-all duration-300 shadow-md">
                 <span class="material-symbols-outlined text-[18px]">add</span>
                 Create Schedule
             </button>
@@ -16,7 +16,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             <StatCard label="Active Schedules" :value="String(activeCount)" sublabel="AUTOMATED RULES" icon="schedule" borderColor="primary" valueColor="slate-900" />
             <StatCard label="Next Execution" sublabel="UPCOMING" icon="timer" borderColor="tertiary">
-                <span class="font-mono text-tertiary font-bold">{{ nextExecutionTime }}</span>
+                <span class="font-mono text-slate-900 font-bold">{{ nextExecutionTime }}</span>
             </StatCard>
             <StatCard label="Paused" :value="String(pausedCount)" sublabel="DISABLED RULES" icon="pause_circle" borderColor="slate-300" valueColor="slate-900" />
             <StatCard label="Total Rules" :value="String(schedules.length)" sublabel="SAVING COSTS" icon="analytics" borderColor="secondary" valueColor="slate-900" />
@@ -41,18 +41,18 @@
                     <tbody class="divide-y divide-slate-200">
                         <tr v-for="schedule in schedules" :key="schedule.id" class="group hover:bg-slate-50 transition-colors">
                             <td class="px-6 py-5">
-                                <span class="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors">{{ schedule.name }}</span>
+                                <span class="text-sm font-bold text-slate-900 group-hover:text-slate-900 transition-colors">{{ schedule.name }}</span>
                             </td>
                             <td class="px-6 py-5">
                                 <div class="flex items-center gap-2 px-2 py-1 bg-slate-50 rounded border border-slate-200 w-fit">
-                                    <span :class="['text-[10px] font-mono font-bold', schedule.resource_type === 'ec2' ? 'text-primary' : 'text-secondary']">{{ schedule.resource_type.toUpperCase() }}</span>
+                                    <span :class="['text-[10px] font-mono font-bold', schedule.resource_type === 'ec2' ? 'text-slate-900' : 'text-slate-600']">{{ schedule.resource_type.toUpperCase() }}</span>
                                     <span class="text-[10px] font-mono text-slate-500">{{ schedule.resource_id }}</span>
                                 </div>
                             </td>
                             <td class="px-6 py-5">
                                 <span :class="[
                                     'inline-flex items-center px-2.5 py-1 rounded text-[10px] font-mono border font-bold uppercase tracking-wider',
-                                    schedule.action === 'start' ? 'bg-tertiary/10 text-tertiary border-tertiary/20' :
+                                    schedule.action === 'start' ? 'bg-slate-900/10 text-slate-900 border-slate-900/20' :
                                     schedule.action === 'stop' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
                                     'bg-error/10 text-error border-error/20'
                                 ]">
@@ -82,7 +82,7 @@
                             </td>
                             <td class="px-6 py-5 text-right">
                                 <div class="flex items-center justify-end gap-2">
-                                    <button @click="openModal(schedule)" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-primary hover:bg-primary/5 transition-all border border-transparent hover:border-primary active:scale-90">
+                                    <button @click="openModal(schedule)" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all border border-transparent hover:border-slate-900 active:scale-90">
                                         <span class="material-symbols-outlined text-[18px]">edit</span>
                                     </button>
                                     <button @click="deleteSchedule(schedule.id)" class="w-8 h-8 rounded-lg flex items-center justify-center text-error/60 hover:text-error hover:bg-error/5 transition-all border border-transparent hover:border-error active:scale-90">
@@ -100,7 +100,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
+            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#0f172a 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
         </section>
 
         <!-- Schedule Create/Edit Modal -->

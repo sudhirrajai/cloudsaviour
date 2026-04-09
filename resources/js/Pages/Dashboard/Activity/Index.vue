@@ -11,7 +11,7 @@
                     :class="[
                         'px-4 py-1.5 rounded-full text-[10px] font-mono border transition-colors font-bold uppercase tracking-widest',
                         activeFilter === filter.value
-                            ? 'bg-primary text-white border-primary shadow-sm'
+                            ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
                             : 'bg-white hover:bg-slate-50 text-slate-500 border-slate-300'
                     ]"
                     @click="applyFilter(filter.value)"
@@ -51,14 +51,14 @@
                             </td>
                             <td class="px-6 py-5">
                                 <div class="flex items-center gap-3">
-                                    <div v-if="log.actor_type === 'user'" :class="['w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white bg-primary border border-slate-200 shadow-sm shadow-primary/20']">
+                                    <div v-if="log.actor_type === 'user'" :class="['w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white bg-slate-900 border border-slate-200 shadow-sm']">
                                         {{ log.actor_initials }}
                                     </div>
                                     <div v-else :class="['w-9 h-9 rounded-full flex items-center justify-center border border-slate-200 shadow-sm transition-all group-hover:scale-110', actorIconBg(log.actor_type)]">
                                         <span :class="['material-symbols-outlined text-[18px]', actorIconColor(log.actor_type)]">{{ actorIcon(log.actor_type) }}</span>
                                     </div>
                                     <div>
-                                        <div class="text-sm font-semibold text-slate-900 group-hover:text-primary transition-colors">{{ log.actor_name }}</div>
+                                        <div class="text-sm font-semibold text-slate-900 group-hover:text-slate-900 transition-colors">{{ log.actor_name }}</div>
                                         <span :class="['inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-mono uppercase tracking-widest mt-1 border', actorBadge(log.actor_type)]">
                                             {{ log.actor_type }}
                                         </span>
@@ -96,13 +96,13 @@
                     v-html="link.label"
                     :class="[
                         'px-4 py-1.5 rounded-md text-[10px] font-mono border transition-all active:scale-95 shadow-sm',
-                        link.active ? 'bg-primary text-white border-primary shadow-sm' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50 hover:text-primary',
+                        link.active ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50 hover:text-slate-900',
                         !link.url ? 'opacity-30 cursor-not-allowed mx-1' : 'cursor-pointer'
                     ]"
                 ></button>
             </div>
 
-            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#3b82f6 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
+            <div class="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style="background-image: radial-gradient(#0f172a 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
         </section>
     </DashboardLayout>
 </template>
@@ -144,23 +144,23 @@ const applyFilter = (value) => {
 };
 
 const actionBadge = (action) => ({
-    started: 'bg-tertiary/10 text-tertiary border-tertiary/20',
-    stopped: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-    deleted: 'bg-error/10 text-error border-error/20',
-    created: 'bg-primary/10 text-primary border-primary/20',
-    applied: 'bg-secondary/10 text-secondary border-secondary/20',
-    sync: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+    started: 'bg-slate-900/10 text-slate-900 border-slate-900/20',
+    stopped: 'bg-slate-500/10 text-slate-600 border-slate-500/20',
+    deleted: 'bg-slate-900 text-white border-slate-900 font-bold',
+    created: 'bg-slate-800/10 text-slate-800 border-slate-800/20',
+    applied: 'bg-slate-700/10 text-slate-700 border-slate-700/20',
+    sync: 'bg-slate-400/10 text-slate-500 border-slate-400/20',
     detected: 'bg-surface-elevated text-content-variant border-border-ghost',
 }[action] || 'bg-surface-elevated text-content-variant border-border-ghost');
 
 const actorIcon = (type) => ({ system: 'smart_toy', ai: 'auto_awesome', schedule: 'schedule' }[type] || 'person');
-const actorIconBg = (type) => ({ system: 'bg-tertiary/20', ai: 'bg-primary/20', schedule: 'bg-amber-500/20' }[type] || 'bg-slate-600/20');
-const actorIconColor = (type) => ({ system: 'text-tertiary', ai: 'text-primary', schedule: 'text-amber-500' }[type] || 'text-slate-400');
+const actorIconBg = (type) => ({ system: 'bg-slate-100', ai: 'bg-slate-800', schedule: 'bg-slate-300' }[type] || 'bg-slate-50');
+const actorIconColor = (type) => ({ system: 'text-slate-600', ai: 'text-white', schedule: 'text-slate-900' }[type] || 'text-slate-400');
 const actorBadge = (type) => ({
-    user: 'bg-secondary/10 text-secondary',
-    system: 'bg-tertiary/10 text-tertiary',
-    ai: 'bg-primary/10 text-primary',
-    schedule: 'bg-amber-500/10 text-amber-400',
+    user: 'bg-slate-900/10 text-slate-900',
+    system: 'bg-slate-700/10 text-slate-700',
+    ai: 'bg-slate-800/10 text-slate-800',
+    schedule: 'bg-slate-500/10 text-slate-500',
 }[type] || '');
 </script>
 

@@ -106,6 +106,16 @@ class RunScheduledActionJob implements ShouldQueue
                     $schedule->update(['last_run_at' => $now]);
                 } catch (\Exception $e) {
                     report($e);
+                    
+                    if ($schedule->workspace->shouldNotify('scheduled action failures')) {
+                        \Illuminate\Support\Facades\Mail::to($schedule->workspace->owner->email)->send(
+                            new \App\Mail\ScheduledActionFailureMail(
+                                $schedule->workspace->name, 
+                                $schedule->name, 
+                                $e->getMessage()
+                            )
+                        );
+                    }
                 }
             });
     }
