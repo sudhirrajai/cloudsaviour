@@ -1,12 +1,12 @@
 <template>
     <Transition name="modal-fade">
-        <div v-if="show" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div v-if="show" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
             <!-- Backdrop -->
             <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" @click="close"></div>
 
             <!-- Modal Content -->
-            <div class="relative w-full max-w-2xl bg-white border border-slate-900 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 my-8">
-                <div class="px-5 sm:px-8 py-4 sm:py-6 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+            <div class="relative w-full max-w-2xl max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)] flex flex-col bg-white border border-slate-900 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+                <div class="shrink-0 px-5 sm:px-8 py-4 sm:py-6 border-b border-slate-200 flex items-center justify-between bg-slate-50 relative z-10">
                     <div class="flex items-center gap-3 sm:gap-4">
                         <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-900 flex items-center justify-center border border-slate-900 shadow-sm">
                             <span class="material-symbols-outlined text-white text-xl sm:text-2xl">{{ isEditing ? 'edit_calendar' : 'add_task' }}</span>
@@ -22,179 +22,183 @@
                 </div>
 
                 <!-- Form -->
-                <form @submit.prevent="submit" class="p-5 sm:p-8">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8">
-                        
-                        <!-- Name -->
-                        <div class="col-span-full">
-                            <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Schedule Name</label>
-                            <input 
-                                v-model="form.name" 
-                                type="text" 
-                                required
-                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all placeholder:text-slate-400 shadow-sm"
-                                placeholder="e.g., Nightly Shutdown"
-                            />
-                            <div v-if="form.errors.name" class="mt-1 text-xs text-error">{{ form.errors.name }}</div>
-                        </div>
-
-                        <!-- Target Resource -->
-                        <div>
-                            <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Resource Type</label>
-                            <select 
-                                v-model="form.resource_type" 
-                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
-                            >
-                                <option value="ec2" class="bg-white text-slate-900">EC2 Instance</option>
-                                <option value="rds" class="bg-white text-slate-900">RDS Instance</option>
-                            </select>
-                            <div v-if="form.errors.resource_type" class="mt-1 text-xs text-error font-bold">{{ form.errors.resource_type }}</div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Target Instance</label>
-                            <select 
-                                v-model="form.resource_id" 
-                                required
-                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all disabled:opacity-50 appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
-                                :disabled="!availableInstances.length"
-                            >
-                                <option value="" disabled class="bg-white text-slate-400">Select an instance</option>
-                                <option v-for="instance in availableInstances" :key="instance.id" :value="instance.id" class="bg-white text-slate-900">
-                                    {{ instance.label }}
-                                </option>
-                            </select>
-                            <div v-if="form.errors.resource_id" class="mt-1 text-xs text-error font-bold">{{ form.errors.resource_id }}</div>
-                        </div>
-
-                        <!-- Action -->
-                        <div class="col-span-full">
-                            <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Action to Perform</label>
-                            <div class="space-y-4">
-                                <div class="flex flex-col sm:flex-row gap-4">
-                                    <button 
-                                        type="button"
-                                        @click="form.action = 'start'"
-                                        class="flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-2 border shadow-sm"
-                                        :class="form.action === 'start' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-900 hover:border-slate-900'"
-                                    >
-                                        <span class="material-symbols-outlined text-[18px]">play_arrow</span> Start
-                                    </button>
-                                    <button 
-                                        type="button"
-                                        @click="form.action = 'stop'"
-                                        class="flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-2 border shadow-sm"
-                                        :class="form.action === 'stop' ? 'bg-slate-700 text-white border-slate-800' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-900 hover:border-slate-900'"
-                                    >
-                                        <span class="material-symbols-outlined text-[18px]">stop</span> Stop
-                                    </button>
-                                </div>
-                                <div class="pt-4 border-t border-slate-200">
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 group/danger">
-                                        <div class="flex items-center gap-2 shrink-0">
-                                            <span class="material-symbols-outlined text-xs text-slate-400 group-hover/danger:text-error transition-colors">gpp_maybe</span>
-                                            <div class="text-[9px] font-mono text-slate-500 uppercase tracking-[0.2em] font-bold group-hover/danger:text-error transition-colors">Critical Actions</div>
-                                        </div>
-                                        <div class="hidden sm:block h-px bg-slate-200 flex-1 group-hover/danger:bg-error/30 transition-colors"></div>
-                                        <div class="flex items-center gap-2 w-full sm:w-auto">
-                                            <button 
-                                                v-if="form.resource_type === 'ec2'"
-                                                type="button"
-                                                @click="form.action = 'terminate'"
-                                                :class="form.action === 'terminate' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
-                                                title="This will permanently destroy the instance"
-                                            >
-                                                <span class="material-symbols-outlined text-[16px]">delete_forever</span> Terminate
-                                            </button>
-                                            <button 
-                                                v-if="form.resource_type === 'rds'"
-                                                type="button"
-                                                @click="form.action = 'delete'"
-                                                :class="form.action === 'delete' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
-                                                title="This will permanently delete the database"
-                                            >
-                                                <span class="material-symbols-outlined text-[16px]">heart_broken</span> Delete DB
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                <form @submit.prevent="submit" class="flex flex-col min-h-0">
+                    <div class="flex-1 overflow-y-auto p-5 sm:p-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                            
+                            <!-- Name -->
+                            <div class="col-span-full">
+                                <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Schedule Name</label>
+                                <input 
+                                    v-model="form.name" 
+                                    type="text" 
+                                    required
+                                    class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all placeholder:text-slate-400 shadow-sm"
+                                    placeholder="e.g., Nightly Shutdown"
+                                />
+                                <div v-if="form.errors.name" class="mt-1 text-xs text-error">{{ form.errors.name }}</div>
                             </div>
-                            <div v-if="form.errors.action" class="mt-1 text-xs text-error">{{ form.errors.action }}</div>
-                        </div>
 
-                        <!-- Warning Message -->
-                        <div v-if="['terminate', 'delete'].includes(form.action)" class="col-span-full animate-in fade-in slide-in-from-top-2 duration-300">
-                            <div class="bg-rose-50 border border-rose-200 rounded-xl p-4 flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-lg bg-rose-500 flex items-center justify-center shrink-0 shadow-sm">
-                                    <span class="material-symbols-outlined text-white">warning</span>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-bold text-rose-900 mb-1">Destructive Action Warning</p>
-                                    <p class="text-[11px] text-rose-700 leading-relaxed font-medium">
-                                        You are scheduling the permanent {{ form.action === 'terminate' ? 'termination' : 'deletion' }} of this resource. 
-                                        This action is irreversible and will result in {{ form.action === 'terminate' ? 'the EC2 instance being destroyed' : 'all database data being lost (SkipFinalSnapshot: Yes)' }}.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Time & Timezone -->
-                        <div>
-                            <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Time of Day</label>
-                            <input 
-                                v-model="form.time_of_day" 
-                                type="time" 
-                                required
-                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-[11px] text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-mono font-bold shadow-sm"
-                            />
-                            <div v-if="form.errors.time_of_day" class="mt-1 text-xs text-error font-bold">{{ form.errors.time_of_day }}</div>
-                        </div>
-
-                        <div class="col-span-full">
-                            <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Timezone</label>
-                            <select 
-                                v-model="form.timezone" 
-                                class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-mono appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
-                            >
-                                <option v-for="tz in availableTimezones" :key="tz" :value="tz" class="bg-white text-slate-900">{{ tz }}</option>
-                            </select>
-                            <div v-if="form.errors.timezone" class="mt-1 text-xs text-error font-bold">{{ form.errors.timezone }}</div>
-                        </div>
-
-                        <!-- Days of Week -->
-                        <div class="col-span-full">
-                            <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Days of Week</label>
-                            <div class="flex flex-wrap gap-2">
-                                <label 
-                                    v-for="day in daysOfWeekOptions" 
-                                    :key="day.value"
-                                    class="cursor-pointer relative"
+                            <!-- Target Resource -->
+                            <div>
+                                <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Resource Type</label>
+                                <select 
+                                    v-model="form.resource_type" 
+                                    class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
                                 >
-                                    <input 
-                                        type="checkbox" 
-                                        :value="day.value" 
-                                        v-model="form.days_of_week"
-                                        class="sr-only peer"
-                                    />
-                                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-mono text-sm border-2 transition-all peer-checked:bg-slate-900 peer-checked:text-white peer-checked:border-slate-900 shadow-sm border-slate-200 text-slate-400 bg-white hover:border-slate-400">
-                                        {{ day.label }}
-                                    </div>
-                                </label>
+                                    <option value="ec2" class="bg-white text-slate-900">EC2 Instance</option>
+                                    <option value="rds" class="bg-white text-slate-900">RDS Instance</option>
+                                </select>
+                                <div v-if="form.errors.resource_type" class="mt-1 text-xs text-error font-bold">{{ form.errors.resource_type }}</div>
                             </div>
-                            <div class="mt-2 text-[10px] text-slate-500 font-mono uppercase tracking-widest font-bold">
-                                Selected: {{ form.days_of_week.length > 0 ? form.days_of_week.map(d => daysOfWeekOptions.find(opt => opt.value === d).full).join(', ') : 'None' }}
-                            </div>
-                            <div v-if="form.errors.days_of_week" class="mt-1 text-xs text-error font-bold">{{ form.errors.days_of_week }}</div>
-                        </div>
 
+                            <div>
+                                <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Target Instance</label>
+                                <select 
+                                    v-model="form.resource_id" 
+                                    required
+                                    class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all disabled:opacity-50 appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
+                                    :disabled="!availableInstances.length"
+                                >
+                                    <option value="" disabled class="bg-white text-slate-400">Select an instance</option>
+                                    <option v-for="instance in availableInstances" :key="instance.id" :value="instance.id" class="bg-white text-slate-900">
+                                        {{ instance.label }}
+                                    </option>
+                                </select>
+                                <div v-if="form.errors.resource_id" class="mt-1 text-xs text-error font-bold">{{ form.errors.resource_id }}</div>
+                            </div>
+
+                            <!-- Action -->
+                            <div class="col-span-full">
+                                <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Action to Perform</label>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col sm:flex-row gap-4">
+                                        <button 
+                                            type="button"
+                                            @click="form.action = 'start'"
+                                            class="flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-2 border shadow-sm"
+                                            :class="form.action === 'start' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-900 hover:border-slate-900'"
+                                        >
+                                            <span class="material-symbols-outlined text-[18px]">play_arrow</span> Start
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            @click="form.action = 'stop'"
+                                            class="flex-1 py-3 text-sm font-black uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-2 border shadow-sm"
+                                            :class="form.action === 'stop' ? 'bg-slate-700 text-white border-slate-800' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-900 hover:border-slate-900'"
+                                        >
+                                            <span class="material-symbols-outlined text-[18px]">stop</span> Stop
+                                        </button>
+                                    </div>
+                                    <div class="pt-4 border-t border-slate-200">
+                                        <div class="flex flex-col sm:flex-row sm:items-center gap-4 group/danger">
+                                            <div class="flex items-center gap-2 shrink-0">
+                                                <span class="material-symbols-outlined text-xs text-slate-400 group-hover/danger:text-error transition-colors">gpp_maybe</span>
+                                                <div class="text-[9px] font-mono text-slate-500 uppercase tracking-[0.2em] font-bold group-hover/danger:text-error transition-colors">Critical Actions</div>
+                                            </div>
+                                            <div class="hidden sm:block h-px bg-slate-200 flex-1 group-hover/danger:bg-error/30 transition-colors"></div>
+                                            <div class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                                                <button 
+                                                    v-if="form.resource_type === 'ec2'"
+                                                    type="button"
+                                                    @click="form.action = 'terminate'"
+                                                    class="w-full sm:w-auto px-4 py-2.5 text-[11px] font-mono uppercase tracking-widest font-bold rounded-lg transition-all flex items-center justify-center gap-2 border shadow-sm"
+                                                    :class="form.action === 'terminate' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-900 hover:border-slate-900 hover:bg-slate-50'"
+                                                    title="This will permanently destroy the instance"
+                                                >
+                                                    <span class="material-symbols-outlined text-[16px]">delete_forever</span> Terminate
+                                                </button>
+                                                <button 
+                                                    v-if="form.resource_type === 'rds'"
+                                                    type="button"
+                                                    @click="form.action = 'delete'"
+                                                    class="w-full sm:w-auto px-4 py-2.5 text-[11px] font-mono uppercase tracking-widest font-bold rounded-lg transition-all flex items-center justify-center gap-2 border shadow-sm"
+                                                    :class="form.action === 'delete' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-900 hover:border-slate-900 hover:bg-slate-50'"
+                                                    title="This will permanently delete the database"
+                                                >
+                                                    <span class="material-symbols-outlined text-[16px]">heart_broken</span> Delete DB
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="form.errors.action" class="mt-1 text-xs text-error">{{ form.errors.action }}</div>
+                            </div>
+
+                            <!-- Warning Message -->
+                            <div v-if="['terminate', 'delete'].includes(form.action)" class="col-span-full animate-in fade-in slide-in-from-top-2 duration-300">
+                                <div class="bg-rose-50 border border-rose-200 rounded-xl p-4 flex items-start gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-rose-500 flex items-center justify-center shrink-0 shadow-sm">
+                                        <span class="material-symbols-outlined text-white">warning</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-rose-900 mb-1">Destructive Action Warning</p>
+                                        <p class="text-[11px] text-rose-700 leading-relaxed font-medium">
+                                            You are scheduling the permanent {{ form.action === 'terminate' ? 'termination' : 'deletion' }} of this resource. 
+                                            This action is irreversible and will result in {{ form.action === 'terminate' ? 'the EC2 instance being destroyed' : 'all database data being lost (SkipFinalSnapshot: Yes)' }}.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Time & Timezone -->
+                            <div>
+                                <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Time of Day</label>
+                                <input 
+                                    v-model="form.time_of_day" 
+                                    type="time" 
+                                    required
+                                    class="w-full bg-white border border-slate-900 rounded-lg px-4 py-[11px] text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-mono font-bold shadow-sm"
+                                />
+                                <div v-if="form.errors.time_of_day" class="mt-1 text-xs text-error font-bold">{{ form.errors.time_of_day }}</div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Timezone</label>
+                                <select 
+                                    v-model="form.timezone" 
+                                    class="w-full bg-white border border-slate-900 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-mono appearance-none cursor-pointer hover:bg-slate-50 shadow-sm"
+                                >
+                                    <option v-for="tz in availableTimezones" :key="tz" :value="tz" class="bg-white text-slate-900">{{ tz }}</option>
+                                </select>
+                                <div v-if="form.errors.timezone" class="mt-1 text-xs text-error font-bold">{{ form.errors.timezone }}</div>
+                            </div>
+
+                            <!-- Days of Week -->
+                            <div class="col-span-full">
+                                <label class="block text-xs font-mono text-slate-600 font-bold uppercase tracking-wider mb-2">Days of Week</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <label 
+                                        v-for="day in daysOfWeekOptions" 
+                                        :key="day.value"
+                                        class="cursor-pointer relative"
+                                    >
+                                        <input 
+                                            type="checkbox" 
+                                            :value="day.value" 
+                                            v-model="form.days_of_week"
+                                            class="sr-only peer"
+                                        />
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-mono text-sm border-2 transition-all peer-checked:bg-slate-900 peer-checked:text-white peer-checked:border-slate-900 shadow-sm border-slate-200 text-slate-400 bg-white hover:border-slate-400">
+                                            {{ day.label }}
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="mt-2 text-[10px] text-slate-500 font-mono uppercase tracking-widest font-bold">
+                                    Selected: {{ form.days_of_week.length > 0 ? form.days_of_week.map(d => daysOfWeekOptions.find(opt => opt.value === d).full).join(', ') : 'None' }}
+                                </div>
+                                <div v-if="form.errors.days_of_week" class="mt-1 text-xs text-error font-bold">{{ form.errors.days_of_week }}</div>
+                            </div>
+
+                        </div>
                     </div>
 
                     <!-- Footer -->
-                    <div class="flex items-center justify-end gap-3 pt-6 border-t border-slate-200">
+                    <div class="shrink-0 px-5 sm:px-8 py-4 sm:py-5 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-3 relative z-10">
                         <button 
                             type="button"
                             @click="close"
-                            class="px-5 py-2.5 rounded-lg text-[11px] font-mono uppercase tracking-widest font-bold text-slate-400 hover:text-slate-900 transition-all hover:bg-slate-100"
+                            class="px-5 py-2.5 rounded-lg text-[11px] font-mono uppercase tracking-widest font-bold text-slate-400 hover:text-slate-900 transition-all hover:bg-slate-200"
                         >
                             Cancel
                         </button>

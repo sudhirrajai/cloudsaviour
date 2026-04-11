@@ -304,7 +304,7 @@ const iamPolicy = `{
         "ec2:ReleaseAddress",
         "ec2:DescribeNatGateways",
         "ec2:DeleteNatGateway",
-        "ec2:DescribeLoadBalancers",
+        "elasticloadbalancing:DescribeLoadBalancers",
         "ec2:DescribeRegions",
         "ec2:DescribeTags"
       ],

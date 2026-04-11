@@ -53,47 +53,63 @@ Route::middleware(['auth', 'workspace'])->prefix('dashboard')->group(function ()
 
     // Servers
     Route::get('/servers', [ServerController::class, 'index'])->name('servers.index');
-    Route::post('/servers/{instanceId}/start', [ServerController::class, 'start']);
-    Route::post('/servers/{instanceId}/stop', [ServerController::class, 'stop']);
-    Route::post('/servers/{instanceId}/refresh', [ServerController::class, 'refresh']);
-    Route::post('/servers/sync', [ServerController::class, 'sync']);
+    Route::middleware('workspace.role:owner,admin,developer')->group(function () {
+        Route::post('/servers/{instanceId}/start', [ServerController::class, 'start']);
+        Route::post('/servers/{instanceId}/stop', [ServerController::class, 'stop']);
+        Route::post('/servers/{instanceId}/refresh', [ServerController::class, 'refresh']);
+        Route::post('/servers/sync', [ServerController::class, 'sync']);
+    });
 
     // Cost
     Route::get('/cost', [CostController::class, 'index'])->name('cost.index');
 
     // Idle Scanner
     Route::get('/idle', [IdleScannerController::class, 'index'])->name('idle.index');
-    Route::post('/idle/{id}/resolve', [IdleScannerController::class, 'resolve']);
-    Route::post('/idle/{id}/ignore', [IdleScannerController::class, 'ignore']);
-    Route::post('/idle/scan', [IdleScannerController::class, 'scan']);
+    Route::middleware('workspace.role:owner,admin,developer')->group(function () {
+        Route::post('/idle/{id}/resolve', [IdleScannerController::class, 'resolve']);
+        Route::post('/idle/{id}/ignore', [IdleScannerController::class, 'ignore']);
+        Route::post('/idle/scan', [IdleScannerController::class, 'scan']);
+    });
 
     // Schedules
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
-    Route::post('/schedules', [ScheduleController::class, 'store']);
-    Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
-    Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
-    Route::patch('/schedules/{id}/toggle', [ScheduleController::class, 'toggle']);
+    Route::middleware('workspace.role:owner,admin,developer')->group(function () {
+        Route::post('/schedules', [ScheduleController::class, 'store']);
+        Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
+        Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
+        Route::patch('/schedules/{id}/toggle', [ScheduleController::class, 'toggle']);
+    });
 
     // AI Insights
     Route::get('/ai-insights', [AiInsightController::class, 'index'])->name('ai-insights.index');
-    Route::post('/ai-insights/refresh', [AiInsightController::class, 'refresh'])->name('ai-insights.refresh');
-    Route::post('/ai-insights/{id}/apply', [AiInsightController::class, 'apply']);
-    Route::post('/ai-insights/{id}/dismiss', [AiInsightController::class, 'dismiss']);
+    Route::middleware('workspace.role:owner,admin,developer')->group(function () {
+        Route::post('/ai-insights/refresh', [AiInsightController::class, 'refresh'])->name('ai-insights.refresh');
+        Route::post('/ai-insights/{id}/apply', [AiInsightController::class, 'apply']);
+        Route::post('/ai-insights/{id}/dismiss', [AiInsightController::class, 'dismiss']);
+    });
 
     // Members
     Route::get('/members', [MemberController::class, 'index'])->name('members.index');
-    Route::post('/members/invite', [MemberController::class, 'invite']);
-    Route::put('/members/{userId}/role', [MemberController::class, 'updateRole']);
-    Route::delete('/members/{userId}', [MemberController::class, 'remove']);
+    Route::middleware('workspace.role:owner,admin')->group(function () {
+        Route::post('/members/invite', [MemberController::class, 'invite']);
+        Route::delete('/members/invitations/{id}', [MemberController::class, 'revokeInvitation']);
+        Route::put('/members/{userId}/role', [MemberController::class, 'updateRole']);
+        Route::delete('/members/{userId}', [MemberController::class, 'remove']);
+    });
 
     // Activity
     Route::get('/activity', [ActivityLogController::class, 'index'])->name('activity.index');
 
     // Settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
-    Route::put('/settings/aws', [SettingsController::class, 'updateAws']);
-    Route::put('/settings/workspace', [SettingsController::class, 'updateWorkspace']);
-    Route::put('/settings/notifications', [SettingsController::class, 'updateNotifications']);
-    Route::post('/settings/test-connection', [SettingsController::class, 'testConnection']);
-    Route::delete('/settings/workspace', [SettingsController::class, 'deleteWorkspace']);
+    Route::middleware('workspace.role:owner,admin')->group(function () {
+        Route::put('/settings/aws', [SettingsController::class, 'updateAws']);
+        Route::put('/settings/workspace', [SettingsController::class, 'updateWorkspace']);
+        Route::put('/settings/notifications', [SettingsController::class, 'updateNotifications']);
+        Route::post('/settings/test-connection', [SettingsController::class, 'testConnection']);
+    });
+    Route::delete('/settings/workspace', [SettingsController::class, 'deleteWorkspace'])->middleware('workspace.owner');
 });
+
+// Invitation acceptance (accessible by guests or logged-in users)
+Route::get('/invitation/{token}', [MemberController::class, 'acceptInvitation'])->name('invitation.accept');

@@ -62,7 +62,32 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Create default workspace
+        $invitationToken = session('invitation_token');
+        $invitation = null;
+
+        if ($invitationToken) {
+            $invitation = \App\Models\WorkspaceInvitation::where('token', $invitationToken)
+                ->whereNull('accepted_at')
+                ->first();
+        }
+
+        if ($invitation && !$invitation->isExpired()) {
+            // Join invited workspace
+            $invitation->workspace->members()->attach($user->id, [
+                'role' => $invitation->role,
+                'joined_at' => now(),
+            ]);
+
+            $invitation->update(['accepted_at' => now()]);
+            session()->forget('invitation_token');
+            
+            Auth::login($user);
+            session(['active_workspace_id' => $invitation->workspace_id]);
+
+            return redirect('/dashboard/servers')->with('success', "Welcome to {$invitation->workspace->name}!");
+        }
+
+        // Create default workspace if no invitation
         $workspace = Workspace::create([
             'name' => $user->name . "'s Workspace",
             'slug' => Str::slug($user->name) . '-' . Str::random(6),

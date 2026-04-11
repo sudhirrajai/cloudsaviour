@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'workspace' => \App\Http\Middleware\EnsureWorkspaceMember::class,
             'workspace.owner' => \App\Http\Middleware\EnsureWorkspaceOwner::class,
+            'workspace.role' => \App\Http\Middleware\AuthorizeWorkspaceRole::class,
             'admin' => \App\Http\Middleware\IsAdmin::class,
             'active' => \App\Http\Middleware\CheckActiveStatus::class,
         ]);

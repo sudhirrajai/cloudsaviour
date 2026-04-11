@@ -6,6 +6,7 @@ use App\Models\ActivityLog;
 use App\Models\WorkspaceInvitation;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -66,7 +67,7 @@ class MemberController extends Controller
             return back()->withErrors(['email' => 'An invitation is already pending for this email.']);
         }
 
-        WorkspaceInvitation::create([
+        $invitation = WorkspaceInvitation::create([
             'workspace_id' => $workspace->id,
             'email' => $request->email,
             'role' => $request->role,
@@ -74,6 +75,11 @@ class MemberController extends Controller
             'invited_by' => $request->user()->id,
             'expires_at' => now()->addDays(7),
         ]);
+
+        // Send invitation email
+        \Illuminate\Support\Facades\Mail::to($request->email)->send(
+            new \App\Mail\WorkspaceInvitationMail($invitation)
+        );
 
         ActivityLog::create([
             'workspace_id' => $workspace->id,
@@ -87,6 +93,63 @@ class MemberController extends Controller
         ]);
 
         return back()->with('success', "Invitation sent to {$request->email}.");
+    }
+
+    public function acceptInvitation(Request $request, string $token)
+    {
+        $invitation = WorkspaceInvitation::where('token', $token)
+            ->whereNull('accepted_at')
+            ->firstOrFail();
+
+        if ($invitation->isExpired()) {
+            return Inertia::render('Error', [
+                'status' => 403,
+                'message' => 'This invitation has expired (valid for 7 days).'
+            ]);
+        }
+
+        $user = Auth::user();
+
+        if ($user) {
+            // Check if user is already a member
+            if ($invitation->workspace->members()->where('user_id', $user->id)->exists()) {
+                $invitation->update(['accepted_at' => now()]);
+                session(['active_workspace_id' => $invitation->workspace_id]);
+                return redirect()->route('servers.index')->with('success', 'You are already a member of this workspace.');
+            }
+
+            // Join workspace
+            $invitation->workspace->members()->attach($user->id, [
+                'role' => $invitation->role,
+                'joined_at' => now(),
+            ]);
+
+            $invitation->update(['accepted_at' => now()]);
+            session(['active_workspace_id' => $invitation->workspace_id]);
+
+            return redirect()->route('servers.index')->with('success', "Welcome to {$invitation->workspace->name}!");
+        }
+
+        // Guest: Store token in session and redirect to register
+        session(['invitation_token' => $token]);
+        
+        return redirect()->route('register')
+            ->with('info', 'Please create an account to join the workspace.');
+    }
+
+    public function revokeInvitation(Request $request, int $id)
+    {
+        $invitation = WorkspaceInvitation::findOrFail($id);
+        
+        // Ensure invitation belongs to current workspace
+        if ($invitation->workspace_id !== app('activeWorkspace')->id) {
+            abort(403);
+        }
+
+        $email = $invitation->email;
+        $invitation->delete();
+
+        return back()->with('success', "Invitation for {$email} revoked.");
     }
 
     public function updateRole(Request $request, int $userId)

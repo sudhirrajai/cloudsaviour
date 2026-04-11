@@ -52,4 +52,13 @@ class User extends Authenticatable
             ->take(2)
             ->join('');
     }
+
+    public function roleIn(Workspace $workspace): ?string
+    {
+        if ($workspace->owner_id === $this->id) {
+            return 'owner';
+        }
+
+        return $this->workspaces()->where('workspaces.id', $workspace->id)->first()?->pivot->role;
+    }
 }

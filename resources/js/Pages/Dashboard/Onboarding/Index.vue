@@ -8,7 +8,7 @@
                 </div>
                 <h1 class="text-5xl font-display font-bold text-slate-900 mb-4 tracking-tight">Welcome to CloudSaviour</h1>
                 <p class="text-slate-600 italic font-sans text-lg max-w-2xl mx-auto">
-                    Let's connect your AWS account. We require read-only access to monitor your resources and optimize your costs.
+                    Let's connect your AWS account. We require access to monitor your resources, retrieve cost data, and execute the resource optimizations and automation schedules you define.
                 </p>
             </header>
 
@@ -210,7 +210,7 @@ const iamPolicy = `{
         "ec2:ReleaseAddress",
         "ec2:DescribeNatGateways",
         "ec2:DeleteNatGateway",
-        "ec2:DescribeLoadBalancers",
+        "elasticloadbalancing:DescribeLoadBalancers",
         "ec2:DescribeRegions",
         "ec2:DescribeTags"
       ],
