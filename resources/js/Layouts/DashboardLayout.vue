@@ -91,15 +91,25 @@
                     <!-- Workspace indicator -->
                     <div class="flex items-center gap-3 font-mono text-xs relative" v-if="$page.props.activeWorkspace">
                         <span class="text-slate-500 uppercase tracking-[0.2em] opacity-60 text-[9px] font-bold">Workspace</span>
-                        <div @click.stop="toggleDropdown('workspace')" class="dropdown-trigger flex items-center gap-2.5 bg-white px-3 py-1.5 rounded-lg border border-slate-300 shadow-sm group cursor-pointer hover:border-slate-900 transition-all">
+                        <!-- Interactive Trigger (Owners Only) -->
+                        <div v-if="$page.props.auth.user.owns_any_workspace"
+                             @click.stop="toggleDropdown('workspace')" 
+                             class="dropdown-trigger flex items-center gap-2.5 bg-white px-3 py-1.5 rounded-lg border border-slate-300 shadow-sm group cursor-pointer hover:border-slate-900 transition-all">
                             <span class="w-2 h-2 rounded-full bg-slate-900 shadow-md"></span>
                             <span class="text-content font-bold tracking-wide">{{ $page.props.activeWorkspace.name }}</span>
                             <span class="material-symbols-outlined text-[16px] text-slate-500 group-hover:text-content transition-colors">unfold_more</span>
                         </div>
+                        
+                        <!-- Static Indicator (Invited Members) -->
+                        <div v-else
+                             class="flex items-center gap-2.5 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-slate-900 shadow-md opacity-80"></span>
+                            <span class="text-content font-bold tracking-wide opacity-90">{{ $page.props.activeWorkspace.name }}</span>
+                        </div>
 
                         <!-- Workspace Dropdown Menu -->
                         <transition enter-active-class="transition duration-100 ease-out" enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100" leave-active-class="transition duration-75 ease-in" leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
-                            <div v-if="activeDropdown === 'workspace'" class="absolute top-full left-0 mt-3 w-64 bg-white border border-slate-900 rounded-xl shadow-lg p-2 z-[60] overflow-hidden">
+                            <div v-if="$page.props.auth.user.owns_any_workspace && activeDropdown === 'workspace'" class="absolute top-full left-0 mt-3 w-64 bg-white border border-slate-900 rounded-xl shadow-lg p-2 z-[60] overflow-hidden">
                                 <!-- Subtle glass shine -->
                                 <div class="absolute inset-0 bg-gradient-to-br from-black/5 via-transparent to-transparent pointer-events-none"></div>
                                 

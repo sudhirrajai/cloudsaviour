@@ -105,6 +105,7 @@ class HandleInertiaRequests extends Middleware
                     'initials' => $user->initials,
                     'is_admin' => (bool)$user->is_admin,
                     'role' => $activeWorkspace ? $user->roleIn($activeWorkspace) : null,
+                    'owns_any_workspace' => $user->ownedWorkspaces()->exists(),
                 ] : null,
             ],
             'activeWorkspace' => $activeWorkspace,

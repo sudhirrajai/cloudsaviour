@@ -9,18 +9,26 @@ use Inertia\Inertia;
 
 class WorkspaceController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
+        $user = $request->user();
+        if ($user->workspaces()->count() > 0 && !$user->ownedWorkspaces()->exists()) {
+            return redirect()->route('servers.index')->with('error', 'You do not have permission to create workspaces.');
+        }
+        
         return Inertia::render('Dashboard/Workspace/Create');
     }
 
     public function store(Request $request)
     {
+        $user = $request->user();
+        if ($user->workspaces()->count() > 0 && !$user->ownedWorkspaces()->exists()) {
+            abort(403, 'You do not have permission to create workspaces.');
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
         ]);
-
-        $user = $request->user();
 
         $workspace = Workspace::create([
             'name' => $request->name,
@@ -47,8 +55,12 @@ class WorkspaceController extends Controller
         $user = $request->user();
         $workspaceId = $request->workspace_id;
 
+        if ($user->workspaces()->count() > 0 && !$user->ownedWorkspaces()->exists()) {
+            abort(403, 'You are bound to your current workspace and cannot switch.');
+        }
+
         // Verify membership
-        if (!$user->workspaces()->where('workspace_id', $workspaceId)->exists()) {
+        if (!$user->workspaces()->where('workspaces.id', $workspaceId)->exists()) {
             abort(403, 'You are not a member of this workspace.');
         }
 
